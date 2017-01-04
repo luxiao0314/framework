@@ -1,0 +1,78 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+    compileSdkVersion globalConfiguration.androidCompileSdkVersion
+    buildToolsVersion globalConfiguration.androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion globalConfiguration.androidMinSdkVersion
+        targetSdkVersion globalConfiguration.androidTargetSdkVersion
+        versionCode globalConfiguration.versionCode
+        versionName globalConfiguration.versionName
+    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+    dataBinding {
+        enabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+
+    //UI
+    compile androidDependencies.recyclerView
+    compile androidDependencies.cardview_v7
+    compile androidDependencies.appcompat_v7
+    compile androidDependencies.design
+
+    //rxjava
+    compile viewDependencies.rxjava
+    compile viewDependencies.rxandroid
+    compile viewDependencies.rxbinding
+
+    //retrofit
+    compile viewDependencies.retrofit
+    compile viewDependencies.retrofit2Gson
+    compile viewDependencies.retrofit2Rxjava
+    compile viewDependencies.okhttp3
+    compile viewDependencies.okhttp3Loging
+    compile viewDependencies.okhttp3Loging
+
+    //fresco
+    compile viewDependencies.fresco
+    compile viewDependencies.frescoGif
+    compile viewDependencies.frescoPhoto
+    compile viewDependencies.gpuImage
+    compile viewDependencies.scaleImage
+    compile viewDependencies.frescoImagepipeline
+
+    //log和其他
+    compile viewDependencies.logger
+
+    //dagger
+    compile viewDependencies.dagger
+    compile viewDependencies.daggerCompiler
+    compile viewDependencies.glassfish
+
+    //glide
+    compile viewDependencies.glide
+    compile viewDependencies.glideTransformations
+    compile viewDependencies.glideIntegration
+
+    //eventbus
+    compile viewDependencies.eventbus
+
+    //基类
+    compile viewDependencies.fragmentation
+}
