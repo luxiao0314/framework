@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import com.mvvm.lux.framework.config.MarkAble;
 import com.mvvm.lux.framework.utils.OkLogger;
 
-import org.greenrobot.eventbus.EventBus;
-
 import me.yokeyword.fragmentation.SupportFragment;
 
 
@@ -58,7 +56,6 @@ public abstract class BaseFragment<T extends BaseViewModel> extends SupportFragm
             parent.removeView(rootView);
         }
         initView(inflater);
-        EventBus.getDefault().register(this);
         return rootView;
     }
 
@@ -103,7 +100,6 @@ public abstract class BaseFragment<T extends BaseViewModel> extends SupportFragm
 
     @Override
     public void onDestroyView() {
-        EventBus.getDefault().unregister(this);
         super.onDestroyView();
         OkLogger.d(this.getClass().getName(), getName() + "------>onDestroyView");
         // view被销毁后，将可以重新触发数据懒加载，因为在viewpager下，fragment不会再次新建并走onCreate的生命周期流程，将从onCreateView开始

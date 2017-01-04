@@ -57,22 +57,12 @@ dependencies {
     compile viewDependencies.scaleImage
     compile viewDependencies.frescoImagepipeline
 
-    //log和其他
-    compile viewDependencies.logger
-
-    //dagger
-    compile viewDependencies.dagger
-    compile viewDependencies.daggerCompiler
-    compile viewDependencies.glassfish
-
     //glide
     compile viewDependencies.glide
     compile viewDependencies.glideTransformations
     compile viewDependencies.glideIntegration
 
-    //eventbus
-    compile viewDependencies.eventbus
-
     //基类
     compile viewDependencies.fragmentation
+    compile 'me.yokeyword:fragmentation:0.7.9'
 }

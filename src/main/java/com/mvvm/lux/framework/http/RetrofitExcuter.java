@@ -5,7 +5,6 @@ import com.mvvm.lux.framework.http.interceptor.UserAgentInterceptor;
 
 import java.util.concurrent.TimeUnit;
 
-import dagger.Module;
 import retrofit2.Retrofit;
 
 /**
@@ -15,7 +14,6 @@ import retrofit2.Retrofit;
  * @Date 2016/12/20 18:36
  * @Version 1.1.0
  */
-@Module
 public class RetrofitExcuter {
 
     public static Retrofit baseUrl(String baseUrl) {

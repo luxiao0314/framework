@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.orhanobut.logger.Logger;
 
 import java.util.LinkedList;
 
@@ -27,8 +26,6 @@ public class BaseApplication extends Application {
         sInstance = this;
         //初始化fresco
         Fresco.initialize(this);
-        //初始化日志
-        Logger.init(getPackageName()).hideThreadInfo();
     }
 
     public static synchronized BaseApplication getAppContext() {
