@@ -1,6 +1,8 @@
 package com.mvvm.lux.framework.base;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -15,11 +17,11 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 
 /**
- * Description: BaseFragment
+ * Description: MvvmFragment
  * Creator: yxc
  * date: 2016/9/7 11:40
  */
-public abstract class BaseFragment<T extends BaseViewModel> extends SupportFragment implements MarkAble{
+public abstract class MvvmFragment<T extends BaseViewModel> extends SupportFragment implements MarkAble{
 
     private final String TAG = getClass().getSimpleName();
     protected T mViewModel;
@@ -27,6 +29,7 @@ public abstract class BaseFragment<T extends BaseViewModel> extends SupportFragm
     protected View rootView;
     private boolean isViewPrepared; // 标识fragment视图已经初始化完毕
     private boolean hasFetchData; // 标识已经触发过懒加载数据
+    protected ViewDataBinding mDataBinding;
 
     @Override
     public void onAttach(Context mContext) {
@@ -49,7 +52,8 @@ public abstract class BaseFragment<T extends BaseViewModel> extends SupportFragm
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         OkLogger.d(this.getClass().getName(), getName() + "------>onCreateView");
         if (rootView == null) {
-            rootView = inflater.inflate(getLayout(), container, false);
+            mDataBinding = DataBindingUtil.inflate(inflater, getLayout(), container, false);
+            rootView = mDataBinding.getRoot();
         }
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
@@ -150,7 +154,7 @@ public abstract class BaseFragment<T extends BaseViewModel> extends SupportFragm
     }
 
     public String getName() {
-        return BaseFragment.class.getName();
+        return MvvmFragment.class.getName();
     }
 
     protected abstract int getLayout();
