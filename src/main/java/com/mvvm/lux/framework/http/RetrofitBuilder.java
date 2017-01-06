@@ -154,7 +154,7 @@ public class RetrofitBuilder {
     }
 
     public RetrofitBuilder baseUrl(String baseUrl) {
-        this.baseUrl = CommonUtils.checkNotNull(baseUrl, "baseUrl == null");
+        this.baseUrl = CommonUtils.checkNotNull(baseUrl, "init == null");
         return this;
     }
 
