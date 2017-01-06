@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mvvm.lux.framework.config.MarkAble;
-import com.mvvm.lux.framework.utils.OkLogger;
+import com.mvvm.lux.framework.utils.Logger;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -34,7 +34,7 @@ public abstract class MvvmFragment<T extends BaseViewModel> extends SupportFragm
     @Override
     public void onAttach(Context mContext) {
         super.onAttach(mContext);
-        OkLogger.d(this.getClass().getName(), getName() + "------>onAttach");
+        Logger.d(this.getClass().getName(), getName() + "------>onAttach");
         if (mContext != null) {
             this.mContext = mContext;
         } else {
@@ -45,12 +45,12 @@ public abstract class MvvmFragment<T extends BaseViewModel> extends SupportFragm
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OkLogger.d(this.getClass().getName(), getName() + "------>onCreate");
+        Logger.d(this.getClass().getName(), getName() + "------>onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        OkLogger.d(this.getClass().getName(), getName() + "------>onCreateView");
+        Logger.d(this.getClass().getName(), getName() + "------>onCreateView");
         if (rootView == null) {
             mDataBinding = DataBindingUtil.inflate(inflater, getLayout(), container, false);
             rootView = mDataBinding.getRoot();
@@ -66,26 +66,26 @@ public abstract class MvvmFragment<T extends BaseViewModel> extends SupportFragm
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        OkLogger.d(this.getClass().getName(), getName() + "------>onActivityCreated");
+        Logger.d(this.getClass().getName(), getName() + "------>onActivityCreated");
         initEvent();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        OkLogger.d(this.getClass().getName(), getName() + "------>onStart");
+        Logger.d(this.getClass().getName(), getName() + "------>onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        OkLogger.d(this.getClass().getName(), getName() + "------>onResume");
+        Logger.d(this.getClass().getName(), getName() + "------>onResume");
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        OkLogger.d(this.getClass().getName(), getName() + "------>onViewCreated");
+        Logger.d(this.getClass().getName(), getName() + "------>onViewCreated");
         isViewPrepared = true;
         lazyFetchDataIfPrepared();
     }
@@ -93,19 +93,19 @@ public abstract class MvvmFragment<T extends BaseViewModel> extends SupportFragm
     @Override
     public void onPause() {
         super.onPause();
-        OkLogger.d(this.getClass().getName(), getName() + "------>onPause");
+        Logger.d(this.getClass().getName(), getName() + "------>onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        OkLogger.d(this.getClass().getName(), getName() + "------>onStop");
+        Logger.d(this.getClass().getName(), getName() + "------>onStop");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        OkLogger.d(this.getClass().getName(), getName() + "------>onDestroyView");
+        Logger.d(this.getClass().getName(), getName() + "------>onDestroyView");
         // view被销毁后，将可以重新触发数据懒加载，因为在viewpager下，fragment不会再次新建并走onCreate的生命周期流程，将从onCreateView开始
         hasFetchData = false;
         isViewPrepared = false;
@@ -115,19 +115,19 @@ public abstract class MvvmFragment<T extends BaseViewModel> extends SupportFragm
     @Override
     public void onDestroy() {
         super.onDestroy();
-        OkLogger.d(this.getClass().getName(), getName() + "------>onDestroy");
+        Logger.d(this.getClass().getName(), getName() + "------>onDestroy");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        OkLogger.d(this.getClass().getName(), getName() + "------>onDetach");
+        Logger.d(this.getClass().getName(), getName() + "------>onDetach");
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        OkLogger.v(TAG, getClass().getName() + "------>isVisibleToUser = " + isVisibleToUser);
+        Logger.v(TAG, getClass().getName() + "------>isVisibleToUser = " + isVisibleToUser);
         if (isVisibleToUser) {
             lazyFetchDataIfPrepared();
         }

@@ -309,8 +309,8 @@ public class RetrofitBuilder {
                     .create());
 
         retrofitBuilder.baseUrl(baseUrl)
-                .addConverterFactory(converterFactory)
-                .addCallAdapterFactory(callAdapterFactory)
+                .addConverterFactory(converterFactory)  //Converter对Call<T>中的T转换
+                .addCallAdapterFactory(callAdapterFactory)  //CallAdapter对Call转换为Rxjava的Observable
                 .client(HttpHolder.okHttpClient);
 
         return retrofitBuilder.build();

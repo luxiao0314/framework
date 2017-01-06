@@ -1,9 +1,9 @@
 package com.mvvm.lux.framework.http.exception;
 
 import android.net.ParseException;
-import android.util.Log;
 
 import com.google.gson.JsonParseException;
+import com.mvvm.lux.framework.utils.Logger;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
@@ -18,7 +18,7 @@ import retrofit2.adapter.rxjava.HttpException;
 public class RetrofitException {
 
     private static final int UNAUTHORIZED = 401;    //未认证
-    private static final int FORBIDDEN = 403;
+    private static final int FORBIDDEN = 403;   //被禁止
     private static final int NOT_FOUND = 404;
     private static final int REQUEST_TIMEOUT = 408;
     private static final int INTERNAL_SERVER_ERROR = 500;
@@ -29,25 +29,38 @@ public class RetrofitException {
 
     public static Throwable handleException(java.lang.Throwable e) {
 
-        Log.e("retrofitHelpter", e.getMessage());
+        Logger.e("RetrofitException", e.getMessage());
         Throwable ex;
         if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;
             ex = new Throwable(e, ERROR.HTTP_ERROR);    //协议出错
             switch (httpException.code()) {
-                case UNAUTHORIZED:  //一般是token过期
+                case UNAUTHORIZED:  //一般是token过期,在这里处理可以,抛一个token过期的异常也可以,retry可以解决
                     ex.setMessage("token过期");
                     break;
                 case FORBIDDEN:
+                    ex.setMessage("请求是被禁止的");
                 case NOT_FOUND:
                     ex.setMessage("HTTP NOT FOUND");
                     break;
                 case REQUEST_TIMEOUT:
+                    ex.setMessage("请求超时");
+                    break;
                 case GATEWAY_TIMEOUT:
+                    ex.setMessage("网关超时");
+                    break;
                 case INTERNAL_SERVER_ERROR:
+                    ex.setMessage("内部服务器错误");
+                    break;
                 case BAD_GATEWAY:
+                    ex.setMessage("无效网关");
+                    break;
                 case SERVICE_UNAVAILABLE:
+                    ex.setMessage("找不到服务器");
+                    break;
                 case ACCESS_DENIED:
+                    ex.setMessage("拒绝访问");
+                    break;
                 default:
                     ex.setMessage("网络错误");
                     break;
@@ -76,8 +89,7 @@ public class RetrofitException {
             ex = new Throwable(e, ERROR.SSL_NOT_FOUND);
             ex.setMessage("证书路径没找到");
             return ex;
-        }
-        else if (e instanceof ConnectTimeoutException){
+        } else if (e instanceof ConnectTimeoutException) {
             ex = new Throwable(e, ERROR.TIMEOUT_ERROR);
             ex.setMessage("连接超时");
             return ex;

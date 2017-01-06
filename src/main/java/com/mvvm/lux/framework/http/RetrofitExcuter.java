@@ -25,6 +25,7 @@ public class RetrofitExcuter {
                 .addLog(true) //用于输出网络请求和结果log的拦截器
                 .addCache(true);
                 //.addCookie(true)    //持久化cookie
+                //.addConverterFactory(MyGsonConverterFactory.create())
                 //.addInterceptor(new RequestInterceptor())   //拦截所有请求url,添加全局参数和请求头
                 //.addSSL(new String[]{}, new int[]{R.raw.geotrust}) //添加SSL证书
                 //.addSSLSocketFactory(CusSSLSocketFactory.buildSSLSocketFactory(R.raw.geotrust))

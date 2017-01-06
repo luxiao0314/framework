@@ -32,7 +32,7 @@ public class HandleResultFuc<T> implements Func1<BaseResponse<T>, Observable<T>>
             }
 
             //类似于code == 200,1,0 就表示请求成功
-            if (baseResponse.isOk(BaseApplication.getAppContext())) {
+            if (baseResponse.isOk()) {
                 if (null == baseResponse.getData() && null == baseResponse.getResult()) {
                     return createData(baseResponse.getRet());
                 }

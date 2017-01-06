@@ -3,7 +3,6 @@ package com.mvvm.lux.framework.http.interceptor;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.mvvm.lux.framework.BaseApplication;
 import com.mvvm.lux.framework.http.base.BaseResponse;
 
 import java.io.IOException;
@@ -58,7 +57,7 @@ public class TokenInterceptor implements Interceptor {
         Log.d("body", "body---------->" + bodyString);
 
         /***************************************/
-        if (baseResponse.isOk(BaseApplication.getAppContext())){//根据和服务端的约定判断token过期
+        if (baseResponse.isOk()){//根据和服务端的约定判断token过期
 
             //取出本地的refreshToken
             String refreshToken = "sssgr122222222";

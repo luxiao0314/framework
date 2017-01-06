@@ -7,7 +7,7 @@ import android.view.WindowManager;
 
 import com.mvvm.lux.framework.BaseApplication;
 import com.mvvm.lux.framework.config.MarkAble;
-import com.mvvm.lux.framework.utils.OkLogger;
+import com.mvvm.lux.framework.utils.Logger;
 
 import me.yokeyword.fragmentation.SupportActivity;
 
@@ -23,7 +23,7 @@ public abstract class BaseActivity<T extends BaseViewModel> extends SupportActiv
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OkLogger.d(this.getClass().getName(), this.getClass().getName() + "------>onCreate");
+        Logger.d(this.getClass().getName(), this.getClass().getName() + "------>onCreate");
         init();
         initView();
     }
@@ -39,37 +39,37 @@ public abstract class BaseActivity<T extends BaseViewModel> extends SupportActiv
     @Override
     protected void onStart() {
         super.onStart();
-        OkLogger.d(this.getClass().getName(), this.getClass().getName() + "------>onStart");
+        Logger.d(this.getClass().getName(), this.getClass().getName() + "------>onStart");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        OkLogger.d(this.getClass().getName(), this.getClass().getName() + "------>onRestart");
+        Logger.d(this.getClass().getName(), this.getClass().getName() + "------>onRestart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        OkLogger.d(this.getClass().getName(), this.getClass().getName() + "------>onResume");
+        Logger.d(this.getClass().getName(), this.getClass().getName() + "------>onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        OkLogger.d(this.getClass().getName(), this.getClass().getName() + "------>onPause");
+        Logger.d(this.getClass().getName(), this.getClass().getName() + "------>onPause");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        OkLogger.d(this.getClass().getName(), this.getClass().getName() + "------>onStop");
+        Logger.d(this.getClass().getName(), this.getClass().getName() + "------>onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        OkLogger.d(this.getClass().getName(), this.getClass().getName() + "------>onDestroy");
+        Logger.d(this.getClass().getName(), this.getClass().getName() + "------>onDestroy");
         BaseApplication.getAppContext().unregisterActivity(this);
         if (mViewModel != null)
             mViewModel.detachView();

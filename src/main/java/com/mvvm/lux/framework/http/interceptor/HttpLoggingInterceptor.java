@@ -1,11 +1,10 @@
 package com.mvvm.lux.framework.http.interceptor;
 
-import com.mvvm.lux.framework.utils.OkLogger;
+import com.mvvm.lux.framework.utils.Logger;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import okhttp3.Connection;
 import okhttp3.Headers;
@@ -33,7 +32,7 @@ public class HttpLoggingInterceptor implements Interceptor {
 
     private volatile Level printLevel = Level.BODY;
     private java.util.logging.Level colorLevel;
-    private Logger logger;
+    private java.util.logging.Logger logger;
 
     public enum Level {
         NONE,       //不打印log
@@ -43,7 +42,7 @@ public class HttpLoggingInterceptor implements Interceptor {
     }
 
     public HttpLoggingInterceptor(String tag) {
-        logger = Logger.getLogger(tag);
+        logger = java.util.logging.Logger.getLogger(tag);
         this.setColorLevel(java.util.logging.Level.SEVERE);
         this.setPrintLevel(Level.BODY);
     }
@@ -112,7 +111,7 @@ public class HttpLoggingInterceptor implements Interceptor {
                 }
             }
         } catch (Exception e) {
-            OkLogger.e(e);
+            Logger.e(e);
         } finally {
             log("=================> END " + request.method() + "\n");
         }
@@ -147,7 +146,7 @@ public class HttpLoggingInterceptor implements Interceptor {
                 }
             }
         } catch (Exception e) {
-            OkLogger.e(e);
+            Logger.e(e);
         } finally {
             log("<=================================== END HTTP" + "\n\n");
         }

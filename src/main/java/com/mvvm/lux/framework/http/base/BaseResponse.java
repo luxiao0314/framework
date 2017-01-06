@@ -1,8 +1,6 @@
 package com.mvvm.lux.framework.http.base;
 
 
-import android.content.Context;
-
 import com.mvvm.lux.framework.config.ConfigLoader;
 
 
@@ -58,8 +56,8 @@ public class BaseResponse<T> {
         this.data = data;
     }
 
-    public boolean isOk(Context context) {
-        return ConfigLoader.checkSucess(context, getCode());
+    public boolean isOk() {
+        return ConfigLoader.checkSucess(getCode());
     }
 
     public T getResult() {

@@ -11,7 +11,7 @@ import android.util.Log;
  * 修订历史：
  * ================================================
  */
-public class OkLogger {
+public class Logger {
     private static boolean isLogEnable = true;
 
     public static String tag = "OkGo";
