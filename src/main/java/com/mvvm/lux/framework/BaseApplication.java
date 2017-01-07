@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 
 import java.util.LinkedList;
 
@@ -25,7 +26,10 @@ public class BaseApplication extends Application {
         super.onCreate();
         sInstance = this;
         //初始化fresco
-        Fresco.initialize(this);
+        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
+                .setDownsampleEnabled(true)
+                .build();
+        Fresco.initialize(this, config);
     }
 
     public static synchronized BaseApplication getAppContext() {

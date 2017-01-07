@@ -1,7 +1,7 @@
 package com.mvvm.lux.framework.manager.recycler.sectioned;
 
+import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 /**
  * Created by hcc on 16/8/27 11:51
@@ -9,16 +9,14 @@ import android.view.View;
  * <p/>
  * Abstract Section with no States.
  */
-public abstract class StatelessSection extends Section
-{
+public abstract class StatelessSection extends Section {
 
     /**
      * Create a Section object with loading/failed states but no header and footer
      *
      * @param itemResourceId layout resource for its items
      */
-    public StatelessSection(int itemResourceId)
-    {
+    public StatelessSection(int itemResourceId) {
 
         super();
         this.itemResourceId = itemResourceId;
@@ -30,8 +28,7 @@ public abstract class StatelessSection extends Section
      * @param headerResourceId layout resource for its header
      * @param itemResourceId   layout resource for its items
      */
-    public StatelessSection(int headerResourceId, int itemResourceId)
-    {
+    public StatelessSection(int headerResourceId, int itemResourceId) {
 
         this(itemResourceId);
         this.headerResourceId = headerResourceId;
@@ -45,8 +42,7 @@ public abstract class StatelessSection extends Section
      * @param footerResourceId layout resource for its footer
      * @param itemResourceId   layout resource for its items
      */
-    public StatelessSection(int headerResourceId, int footerResourceId, int itemResourceId)
-    {
+    public StatelessSection(int headerResourceId, int footerResourceId, int itemResourceId) {
 
         this(headerResourceId, itemResourceId);
         this.footerResourceId = footerResourceId;
@@ -54,29 +50,25 @@ public abstract class StatelessSection extends Section
     }
 
     @Override
-    public final void onBindLoadingViewHolder(RecyclerView.ViewHolder holder)
-    {
+    public final void onBindLoadingViewHolder(RecyclerView.ViewHolder holder) {
 
         super.onBindLoadingViewHolder(holder);
     }
 
     @Override
-    public final RecyclerView.ViewHolder getLoadingViewHolder(View view)
-    {
+    public final RecyclerView.ViewHolder getLoadingViewHolder(ViewDataBinding view) {
 
         return super.getLoadingViewHolder(view);
     }
 
     @Override
-    public final void onBindFailedViewHolder(RecyclerView.ViewHolder holder)
-    {
+    public final void onBindFailedViewHolder(RecyclerView.ViewHolder holder) {
 
         super.onBindFailedViewHolder(holder);
     }
 
     @Override
-    public final RecyclerView.ViewHolder getFailedViewHolder(View view)
-    {
+    public final RecyclerView.ViewHolder getFailedViewHolder(ViewDataBinding view) {
 
         return super.getFailedViewHolder(view);
     }

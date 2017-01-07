@@ -14,7 +14,7 @@ import android.util.Log;
 public class Logger {
     private static boolean isLogEnable = true;
 
-    public static String tag = "OkGo";
+    public static String tag = "logger_record";
 
     public static void debug(boolean isEnable) {
         debug(tag, isEnable);

@@ -1,7 +1,7 @@
 package com.mvvm.lux.framework.manager.recycler.sectioned;
 
+import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 /**
  * Created by hcc on 16/8/27 11:51
@@ -279,7 +279,7 @@ public abstract class Section {
      * @param view View inflated by resource returned by getHeaderResourceId
      * @return ViewHolder for the Header of this Section
      */
-    public RecyclerView.ViewHolder getHeaderViewHolder(View view) {
+    public RecyclerView.ViewHolder getHeaderViewHolder(ViewDataBinding view) {
 
         return new SectionedRecyclerViewAdapter.EmptyViewHolder(view);
     }
@@ -299,7 +299,7 @@ public abstract class Section {
      * @param view View inflated by resource returned by getFooterResourceId
      * @return ViewHolder for the Footer of this Section
      */
-    public RecyclerView.ViewHolder getFooterViewHolder(View view) {
+    public RecyclerView.ViewHolder getFooterViewHolder(ViewDataBinding view) {
 
         return new SectionedRecyclerViewAdapter.EmptyViewHolder(view);
     }
@@ -319,7 +319,7 @@ public abstract class Section {
      * @param view View inflated by resource returned by getItemResourceId
      * @return ViewHolder for the Item of this Section
      */
-    public abstract RecyclerView.ViewHolder getItemViewHolder(View view);
+    public abstract RecyclerView.ViewHolder getItemViewHolder(ViewDataBinding view);
 
     /**
      * Bind the data to the ViewHolder for an Item of this Section
@@ -335,7 +335,7 @@ public abstract class Section {
      * @param view View inflated by resource returned by getItemResourceId
      * @return ViewHolder for the Loading state of this Section
      */
-    public RecyclerView.ViewHolder getLoadingViewHolder(View view) {
+    public RecyclerView.ViewHolder getLoadingViewHolder(ViewDataBinding view) {
 
         return new SectionedRecyclerViewAdapter.EmptyViewHolder(view);
     }
@@ -355,7 +355,7 @@ public abstract class Section {
      * @param view View inflated by resource returned by getItemResourceId
      * @return ViewHolder for the Failed of this Section
      */
-    public RecyclerView.ViewHolder getFailedViewHolder(View view) {
+    public RecyclerView.ViewHolder getFailedViewHolder(ViewDataBinding view) {
 
         return new SectionedRecyclerViewAdapter.EmptyViewHolder(view);
     }

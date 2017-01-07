@@ -1,5 +1,6 @@
 package com.mvvm.lux.framework.http;
 
+import com.mvvm.lux.framework.utils.Logger;
 import com.mvvm.lux.framework.utils.SnackbarUtil;
 
 import rx.Subscriber;
@@ -23,5 +24,6 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
         SnackbarUtil.showMessage(e.getMessage());
+        Logger.e(e.getMessage());
     }
 }
