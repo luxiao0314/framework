@@ -236,4 +236,17 @@ public class CommonUtils {
         return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 
+    public static String conNum(int num, Integer digit) {
+        if (num < 100000) {
+            return num + "";
+        }
+        String unit = "万";
+        double newNum = num / 10000.0;
+        if (digit != null) {
+            String numStr = String.format("%." + digit + "f", newNum);
+            return numStr + unit;
+        }
+        return newNum + unit;
+    }
+
 }
