@@ -26,17 +26,13 @@ public class Router {
 
     private static RouterCallback callback;
 
-    private Router() {
+    private Router(Activity from) {
+        this.from = from;
         intent = new Intent();
     }
 
-    public static Router newIntent() {
-        return new Router();
-    }
-
-    public Router from(Activity from) {
-        this.from = from;
-        return this;
+    public static Router from(Activity from) {
+        return new Router(from);
     }
 
     public Router to(Class<?> to) {
