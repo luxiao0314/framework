@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
-import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.mvvm.lux.framework.http.RetrofitExcuter;
+import com.mvvm.lux.framework.http.fresco.ImageLoaderConfig;
 
 import java.util.LinkedList;
-
-import okhttp3.OkHttpClient;
 
 /**
  * Created by WangChao on 2016/10/12.
@@ -28,11 +26,13 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sInstance = this;
+        RetrofitExcuter.init();
+        Fresco.initialize(this, ImageLoaderConfig.getImagePipelineConfig(this));
         //初始化fresco
-        ImagePipelineConfig frescoConfig = OkHttpImagePipelineConfigFactory
-                .newBuilder(this, new OkHttpClient())
-                .build();
-        Fresco.initialize(this, frescoConfig);
+//        ImagePipelineConfig frescoConfig = OkHttpImagePipelineConfigFactory
+//                .newBuilder(this, new OkHttpClient())
+//                .build();
+//        Fresco.initialize(this, frescoConfig);
     }
 
     public static synchronized BaseApplication getAppContext() {
