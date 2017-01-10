@@ -2,9 +2,14 @@ package com.mvvm.lux.framework.http;
 
 
 import com.google.gson.GsonBuilder;
+import com.mvvm.lux.framework.BaseApplication;
+import com.mvvm.lux.framework.http.interceptor.CacheInterceptor;
+import com.mvvm.lux.framework.http.interceptor.HttpLoggingInterceptor;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -23,26 +28,8 @@ public class RetrofitExcuter {
 
     /**
      * okhttp全局配置,application初始化一次就可以了
-     *
-     * @return
      */
     public synchronized static void init() {
-        mOkHttpClient = new OkHttpBuilder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(20, TimeUnit.SECONDS)
-                .retryOnConnectionFailure(true) //重试机制
-                .addLog(true) //用于输出网络请求和结果log的拦截器
-                .addCache(true)
-                .build();
-        //.addCookie(true)    //持久化cookie
-        //.addConverterFactory(MyGsonConverterFactory.create())
-        //.addInterceptor(new RequestInterceptor())   //拦截所有请求url,添加全局参数和请求头
-        //.addSSL(new String[]{}, new int[]{R.raw.geotrust}) //添加SSL证书
-        //.addSSLSocketFactory(CusSSLSocketFactory.buildSSLSocketFactory(R.raw.geotrust))
-    }
-
-    /*public synchronized static void init() {
 
         //设置Http缓存
         BaseApplication context = BaseApplication.getAppContext();
@@ -54,13 +41,18 @@ public class RetrofitExcuter {
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
-//                .cookieJar(new CookieManger(context))
                 .addInterceptor(cacheInterceptor)
                 .addNetworkInterceptor(cacheInterceptor)
                 .addInterceptor(new HttpLoggingInterceptor("logger"))
                 .retryOnConnectionFailure(true) //重试机制
                 .build();
-    }*/
+        //.cookieJar(new CookieManger(context))
+        //.addCookie(true)    //持久化cookie
+        //.addConverterFactory(MyGsonConverterFactory.create())
+        //.addInterceptor(new RequestInterceptor())   //拦截所有请求url,添加全局参数和请求头
+        //.addSSL(new String[]{}, new int[]{R.raw.geotrust}) //添加SSL证书
+        //.addSSLSocketFactory(CusSSLSocketFactory.buildSSLSocketFactory(R.raw.geotrust))
+    }
 
     public static OkHttpClient getOkHttpClient() {
         return mOkHttpClient;
