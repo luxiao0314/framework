@@ -1,9 +1,11 @@
 package com.mvvm.lux.framework.manager.dialogs.config;
 
 public class DialogType {
-    public static int PROGRESS_ONE = 1;
+    public static int PROGRESS_ONE = 1; //RST 小图标进度
 
-    public static int PROGRESS_TWO = 2;
+    public static int PROGRESS_TWO = 2; //系统自带progress
+
+    public static int PROGRESS_THREE = 3;   //buka 进度
 
     public static int SIMPLE_ONLY_MESSAGE = 3;
 

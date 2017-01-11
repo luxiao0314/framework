@@ -20,6 +20,8 @@
         <item name="sdlListSelector">@drawable/sdl_list</item>
     </style>
 
+    <!-- ===================进度条背景==================== -->
+
     <!-- Light Theme-->
     <style name="SDL.Dialog" parent="DialogThemeParent">
         <!-- Light theme specific: -->
@@ -40,6 +42,7 @@
         <item name="android:windowBackground">@drawable/sdl_background_dark</item>
     </style>
 
+    <!-- Transparent Theme-->
     <style name="Lx.Transparent.Dialog" parent="DialogThemeParent">
         <!-- Transparent theme specific: -->
         <item name="sdlTextPrimaryColor">@color/sdl_text_primary_light</item>
@@ -47,7 +50,7 @@
         <item name="sdlDividerColor">@color/sdl_divider_light</item>
         <item name="sdlPressedColor">@color/sdl_pressed_light</item>
         <item name="android:backgroundDimAmount">0</item>
-        <item name="android:windowBackground">@drawable/sdl_tr_background</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <style name="SDL.Layout">

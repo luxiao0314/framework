@@ -23,7 +23,7 @@ public class BaseTask {
     public BaseTask(MarkAble markAble) {
         mMarkAble = markAble;
         tagConfig = new TagConfig();
-        dialogBuilder = DialogExchangeModel.init(DialogType.PROGRESS_ONE);
+        dialogBuilder = DialogExchangeModel.init(DialogType.PROGRESS_THREE);
     }
 
     public String getTag() {

@@ -32,7 +32,7 @@ public class DialogManager {
                 .setMessage(baseTask.getProgressContent())
                 .setRequestCode(REQUEST_PROGRESS)
                 .setProgressType(baseTask.getDialogType()) //gif图
-                .useThemeType(3)    //背景透明
+                .useThemeType(3)    //进度条背景透明
                 .setCancelableOnTouchOutside(false) //点击屏幕不取消
                 .showAllowingStateLoss();
     }
