@@ -1,7 +1,7 @@
 package com.mvvm.lux.framework.manager.recycler.sectioned;
 
-import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 /**
  * Created by hcc on 16/8/27 11:51
@@ -56,7 +56,7 @@ public abstract class StatelessSection extends Section {
     }
 
     @Override
-    public final RecyclerView.ViewHolder getLoadingViewHolder(ViewDataBinding view) {
+    public final RecyclerView.ViewHolder getLoadingViewHolder(View view) {
 
         return super.getLoadingViewHolder(view);
     }
@@ -68,7 +68,7 @@ public abstract class StatelessSection extends Section {
     }
 
     @Override
-    public final RecyclerView.ViewHolder getFailedViewHolder(ViewDataBinding view) {
+    public final RecyclerView.ViewHolder getFailedViewHolder(View view) {
 
         return super.getFailedViewHolder(view);
     }

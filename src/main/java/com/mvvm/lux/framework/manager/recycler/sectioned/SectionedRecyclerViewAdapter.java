@@ -1,6 +1,5 @@
 package com.mvvm.lux.framework.manager.recycler.sectioned;
 
-import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -65,10 +64,10 @@ public class SectionedRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                         if (resId == null)
                             throw new NullPointerException("Missing 'header' resource id");
 
-                        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), resId, parent, false);
-//                        view = LayoutInflater.from(parent.getContext()).inflate(resId, parent, false);
+//                        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), resId, parent, false);
+                        view = LayoutInflater.from(parent.getContext()).inflate(resId, parent, false);
                         // get the header viewholder from the section
-                        viewHolder = section.getHeaderViewHolder(dataBinding);
+                        viewHolder = section.getHeaderViewHolder(view);
                         break;
                     }
                     case VIEW_TYPE_FOOTER: {
@@ -77,18 +76,18 @@ public class SectionedRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                         if (resId == null)
                             throw new NullPointerException("Missing 'footer' resource id");
 
-                        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), resId, parent, false);
-//                        view = LayoutInflater.from(parent.getContext()).inflate(resId, parent, false);
+//                        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), resId, parent, false);
+                        view = LayoutInflater.from(parent.getContext()).inflate(resId, parent, false);
                         // get the footer viewholder from the section
-                        viewHolder = section.getFooterViewHolder(dataBinding);
+                        viewHolder = section.getFooterViewHolder(view);
                         break;
                     }
                     case VIEW_TYPE_ITEM_LOADED: {
                         Integer itemResourceId = section.getItemResourceId();
-                        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), itemResourceId, parent, false);
-//                        view = LayoutInflater.from(parent.getContext()).inflate(section.getItemResourceId(), parent, false);
+//                        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), itemResourceId, parent, false);
+                        view = LayoutInflater.from(parent.getContext()).inflate(section.getItemResourceId(), parent, false);
                         // get the item viewholder from the section
-                        viewHolder = section.getItemViewHolder(dataBinding);
+                        viewHolder = section.getItemViewHolder(view);
                         break;
                     }
                     case VIEW_TYPE_LOADING: {
@@ -97,10 +96,9 @@ public class SectionedRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                         if (resId == null)
                             throw new NullPointerException("Missing 'loading state' resource id");
 
-                        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), resId, parent, false);
-//                        view = LayoutInflater.from(parent.getContext()).inflate(resId, parent, false);
+                        view = LayoutInflater.from(parent.getContext()).inflate(resId, parent, false);
                         // get the loading viewholder from the section
-                        viewHolder = section.getLoadingViewHolder(dataBinding);
+                        viewHolder = section.getLoadingViewHolder(view);
                         break;
                     }
                     case VIEW_TYPE_FAILED: {
@@ -109,10 +107,10 @@ public class SectionedRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                         if (resId == null)
                             throw new NullPointerException("Missing 'failed state' resource id");
 
-                        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), resId, parent, false);
-//                        view = LayoutInflater.from(parent.getContext()).inflate(resId, parent, false);
+//                        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), resId, parent, false);
+                        view = LayoutInflater.from(parent.getContext()).inflate(resId, parent, false);
                         // get the failed load viewholder from the section
-                        viewHolder = section.getFailedViewHolder(dataBinding);
+                        viewHolder = section.getFailedViewHolder(view);
                         break;
                     }
                     default:
@@ -390,9 +388,9 @@ public class SectionedRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
      */
     public static class EmptyViewHolder extends RecyclerView.ViewHolder {
 
-        public EmptyViewHolder(ViewDataBinding dataBinding) {
+        public EmptyViewHolder(View itemView) {
 
-            super(dataBinding.getRoot());
+            super(itemView);
         }
     }
 }

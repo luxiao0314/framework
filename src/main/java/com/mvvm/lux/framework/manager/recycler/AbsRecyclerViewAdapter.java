@@ -1,7 +1,7 @@
 package com.mvvm.lux.framework.manager.recycler;
 
 import android.content.Context;
-import android.databinding.ViewDataBinding;
+import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -89,7 +89,7 @@ public abstract class AbsRecyclerViewAdapter extends
     @Override
     public void onBindViewHolder(final ClickableViewHolder holder, final int position) {
 
-        holder.getParentView().getRoot().setOnClickListener(new View.OnClickListener() {
+        holder.getParentView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (itemClickListener != null) {
@@ -97,7 +97,7 @@ public abstract class AbsRecyclerViewAdapter extends
                 }
             }
         });
-        holder.getParentView().getRoot().setOnLongClickListener(new View.OnLongClickListener() {
+        holder.getParentView().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 return itemLongClickListener != null
@@ -108,17 +108,22 @@ public abstract class AbsRecyclerViewAdapter extends
 
     public class ClickableViewHolder extends RecyclerView.ViewHolder {
 
-        private ViewDataBinding parentView;
+        private View parentView;
 
-        public ClickableViewHolder(ViewDataBinding itemView) {
+        public ClickableViewHolder(View itemView) {
 
-            super(itemView.getRoot());
+            super(itemView);
             this.parentView = itemView;
         }
 
-        public ViewDataBinding getParentView() {
+        View getParentView() {
 
             return parentView;
+        }
+
+        public <T extends View> T $(@IdRes int id) {
+
+            return (T) parentView.findViewById(id);
         }
     }
 }
