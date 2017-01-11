@@ -26,13 +26,10 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sInstance = this;
+        //初始化retrofit
         RetrofitExcuter.init();
-        Fresco.initialize(this, ImageLoaderConfig.getImagePipelineConfig(this));
         //初始化fresco
-//        ImagePipelineConfig frescoConfig = OkHttpImagePipelineConfigFactory
-//                .newBuilder(this, new OkHttpClient())
-//                .build();
-//        Fresco.initialize(this, frescoConfig);
+        Fresco.initialize(this, ImageLoaderConfig.getImagePipelineConfig(this));
     }
 
     public static synchronized BaseApplication getAppContext() {
