@@ -106,6 +106,7 @@ public class ImageLoaderConfig {
                         }
                     })
                     .setRequestListeners(requestListeners)
+                    .setNetworkFetcher(new ElnImageDownloaderFetcher()) //防盗链处理,添加header:Referer
                     .setMemoryTrimmableRegistry(memoryTrimmableRegistry) // 报内存警告时的监听
                     // 设置内存配置
                     .setBitmapMemoryCacheParamsSupplier(new BitmapMemoryCacheParamsSupplier(

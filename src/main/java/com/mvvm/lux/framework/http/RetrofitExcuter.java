@@ -34,7 +34,7 @@ public class RetrofitExcuter {
         //设置Http缓存
         BaseApplication context = BaseApplication.getAppContext();
         Cache cache = new Cache(new File(context.getCacheDir(), "http_cache"), 1024 * 1024 * 100);
-        CacheInterceptor cacheInterceptor = new CacheInterceptor(context, String.valueOf(60 * 60 * 6));
+        CacheInterceptor cacheInterceptor = new CacheInterceptor(context, String.valueOf(60 * 60 * 6)); //缓存 cache-control 值
 
         mOkHttpClient = new OkHttpClient.Builder()
                 .cache(cache)
@@ -59,8 +59,9 @@ public class RetrofitExcuter {
     }
 
     public static Retrofit.Builder create() {
-        return new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
+        return new Retrofit.Builder().addConverterFactory(
+
+                GsonConverterFactory.create(new GsonBuilder()
                         .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                         .serializeNulls()
                         .create()))  //Converter对Call<T>中的T转换
