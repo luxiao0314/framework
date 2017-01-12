@@ -48,7 +48,6 @@ dependencies {
     compile viewDependencies.retrofit2Rxjava
     compile viewDependencies.okhttp3
     compile viewDependencies.okhttp3Loging
-    compile viewDependencies.okhttp3Loging
 
     //fresco
     compile viewDependencies.fresco

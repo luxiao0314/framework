@@ -71,7 +71,6 @@ public class RetrofitExcuter {
 
     public static Retrofit.Builder create() {
         return new Retrofit.Builder().addConverterFactory(
-
                 GsonConverterFactory.create(new GsonBuilder()
                         .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                         .serializeNulls()
