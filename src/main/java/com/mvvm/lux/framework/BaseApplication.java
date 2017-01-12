@@ -6,8 +6,13 @@ import android.app.Application;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mvvm.lux.framework.http.RetrofitExcuter;
 import com.mvvm.lux.framework.http.fresco.ImageLoaderConfig;
+import com.mvvm.lux.framework.utils.Logger;
 
 import java.util.LinkedList;
+
+import rx.Observable;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by WangChao on 2016/10/12.
@@ -26,13 +31,20 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-        RetrofitExcuter.init();
-        Fresco.initialize(this, ImageLoaderConfig.getImagePipelineConfig(this));
-        //初始化fresco
-//        ImagePipelineConfig frescoConfig = OkHttpImagePipelineConfigFactory
-//                .newBuilder(this, new OkHttpClient())
-//                .build();
-//        Fresco.initialize(this, frescoConfig);
+        init();
+    }
+
+    private void init() {
+        Observable.just("application中开启子线程初始化")
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String content) {
+                        RetrofitExcuter.init();
+                        Fresco.initialize(BaseApplication.this, ImageLoaderConfig.getImagePipelineConfig(BaseApplication.this));
+                        Logger.e(content + "-" + Thread.currentThread().getName());
+                    }
+                });
     }
 
     public static synchronized BaseApplication getAppContext() {
