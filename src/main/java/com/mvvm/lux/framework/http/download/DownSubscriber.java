@@ -48,9 +48,10 @@ public class DownSubscriber <ResponseBody extends okhttp3.ResponseBody> extends 
     @Override
     public void onNext(ResponseBody responseBody) {
 
-        Log.d(DownLoadManager.TAG, "DownSubscriber:>>>> onNext");
+        Log.d(NovateDownLoadManager.TAG, "DownSubscriber:>>>> onNext");
 
-        DownLoadManager.getInstance(callBack).writeResponseBodyToDisk(path, name, BaseApplication.getAppContext(), responseBody);
+        NovateDownLoadManager.getInstance(callBack)
+                .writeResponseBodyToDisk(path, name, BaseApplication.getAppContext(), responseBody);
 
     }
 }

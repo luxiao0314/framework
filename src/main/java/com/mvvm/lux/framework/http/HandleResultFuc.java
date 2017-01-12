@@ -33,10 +33,13 @@ public class HandleResultFuc<T> implements Func1<BaseResponse<T>, Observable<T>>
 
             //类似于code == 200,1,0 就表示请求成功
             if (baseResponse.isOk()) {
-                if (null == baseResponse.getData() && null == baseResponse.getResult()) {
+                if (null != baseResponse.getRet())
                     return createData(baseResponse.getRet());
-                }
-                return createData(baseResponse.getData());
+                if (null != baseResponse.getBody())
+                    return createData(baseResponse.getBody());
+                if (null != baseResponse.getData())
+                    return createData(baseResponse.getData());
+                return createData(baseResponse.getResult());
             }
             //请求失败抛异常
             else {

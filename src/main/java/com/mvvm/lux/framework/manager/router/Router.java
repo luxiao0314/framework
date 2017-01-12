@@ -19,8 +19,8 @@ public class Router {
     private Class<?> to;
     private Bundle data;
     private int requestCode = -1;
-    private int enterAnim = XDroidConf.ROUTER_ANIM_ENTER;
-    private int exitAnim = XDroidConf.ROUTER_ANIM_EXIT;
+    private int enterAnim = Router.RES_NONE;
+    private int exitAnim = Router.RES_NONE;
 
     public static final int RES_NONE = -1;
 

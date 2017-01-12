@@ -74,7 +74,7 @@ public class ProgressDialogFragment extends BaseDialogFragment {
             mDlgContent.setText(getArguments().getCharSequence(ARG_MESSAGE));
         }
         img.setController(Fresco.newDraweeControllerBuilder()
-                .setUri(Uri.parse("res://" + getContext().getPackageName() + "/" + R.drawable.buka_loading))
+                .setUri(Uri.parse("res://" + getContext().getPackageName() + "/" + R.drawable.gif_loading))
                 .setAutoPlayAnimations(true) // 设置加载图片完成后是否直接进行播放
                 .build());
         builder.setView(layoutView);

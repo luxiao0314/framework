@@ -3,6 +3,7 @@ package com.mvvm.lux.framework.http;
 
 import com.google.gson.GsonBuilder;
 import com.mvvm.lux.framework.BaseApplication;
+import com.mvvm.lux.framework.BuildConfig;
 import com.mvvm.lux.framework.http.interceptor.CacheInterceptor;
 import com.mvvm.lux.framework.http.interceptor.HttpLoggingInterceptor;
 
@@ -46,7 +47,17 @@ public class RetrofitExcuter {
                 .addInterceptor(new HttpLoggingInterceptor("logger"))
                 .retryOnConnectionFailure(true) //重试机制
                 .build();
-        //.cookieJar(new CookieManger(context))
+    }
+
+    public synchronized static void initOk() {
+        mOkHttpClient = new OkHttpBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true) //重试机制
+                .addLog(BuildConfig.DEBUG) //用于输出网络请求和结果log的拦截器
+                .addCache(true)
+                .build();
         //.addCookie(true)    //持久化cookie
         //.addConverterFactory(MyGsonConverterFactory.create())
         //.addInterceptor(new RequestInterceptor())   //拦截所有请求url,添加全局参数和请求头

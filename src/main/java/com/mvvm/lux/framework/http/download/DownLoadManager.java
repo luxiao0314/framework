@@ -119,7 +119,7 @@ public class DownLoadManager {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    callBack.onProgress(finalFileSizeDownloaded);
+                                    callBack.onProgress(1, finalFileSizeDownloaded);    //1111111
                                 }
                             }, 200);
                         }
