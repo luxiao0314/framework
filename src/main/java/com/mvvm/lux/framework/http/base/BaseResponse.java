@@ -14,7 +14,8 @@ public class BaseResponse<T> {
     /*错误信息:msg, error, message*/
     private String msg, error, message;
     /*真实数据 data或者result*/
-    private T data, result, ret;
+
+    private T data, result, ret, body;
 
     public int getCode() {
         return code;
@@ -85,5 +86,13 @@ public class BaseResponse<T> {
 
     public void setRet(T ret) {
         this.ret = ret;
+    }
+
+    public T getBody() {
+        return body;
+    }
+
+    public void setBody(T body) {
+        this.body = body;
     }
 }
