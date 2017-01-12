@@ -2,6 +2,7 @@ package com.mvvm.lux.framework;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.Process;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mvvm.lux.framework.http.RetrofitExcuter;
@@ -40,6 +41,8 @@ public class BaseApplication extends Application {
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String content) {
+                        //设置线程优先级,不与主线程抢资源
+                        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                         RetrofitExcuter.init();
                         Fresco.initialize(BaseApplication.this, ImageLoaderConfig.getImagePipelineConfig(BaseApplication.this));
                         Logger.e(content + "-" + Thread.currentThread().getName());
