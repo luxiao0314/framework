@@ -6,7 +6,6 @@ import com.mvvm.lux.framework.http.exception.RetrofitException;
 import com.mvvm.lux.framework.http.exception.RetryWhenNetworkException;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -32,7 +31,6 @@ public class RxHelper {
                         .onErrorResumeNext(new HttpResponseFunc<T>())//判断异常
                         .retryWhen(new RetryWhenNetworkException());
 //                        .retryWhen(new TimeOutRetry())  //token过期的重试,有问题
-
             }
         };
     }
@@ -49,7 +47,37 @@ public class RxHelper {
         }
     }
 
-//    /**
+    /**
+     * 调度器,切换线程和注销Observable
+     */
+    public static <T> Observable.Transformer<T, T> schedulersTransformer() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> tObservable) {
+                return tObservable
+                        .subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
+
+    /**
+     * 统一线程处理
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> Observable.Transformer<T, T> io_main() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> tObservable) {
+                return tObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
+
+    //    /**
 //     * token过期,登录超时的重新连接
 //     */
 //    public static class TimeOutRetry implements Func1<Observable<? extends Throwable>, Observable> {
@@ -75,54 +103,4 @@ public class RxHelper {
 //        }
 //    }
 
-    /**
-     * 调度器,切换线程和注销Observable
-     */
-    public static <T> Observable.Transformer<T, T> schedulersTransformer() {
-        return new Observable.Transformer<T, T>() {
-            @Override
-            public Observable<T> call(Observable<T> tObservable) {
-                return tObservable
-                        .subscribeOn(Schedulers.io())
-                        .unsubscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
-            }
-        };
-    }
-
-
-    /**
-     * 统一线程处理
-     *
-     * @param <T>
-     * @return
-     */
-    public static <T> Observable.Transformer<T, T> io_main() {
-        return new Observable.Transformer<T, T>() {
-            @Override
-            public Observable<T> call(Observable<T> tObservable) {
-                return tObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-            }
-        };
-    }
-
-    /**
-     * 生成Observable
-     *
-     * @param <T>
-     * @return
-     */
-    public static <T> Observable<T> createData(final T t) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(Subscriber<? super T> subscriber) {
-                try {
-                    subscriber.onNext(t);
-                    subscriber.onCompleted();
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
-            }
-        });
-    }
 }

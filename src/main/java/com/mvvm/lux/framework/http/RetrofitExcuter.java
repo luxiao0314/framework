@@ -2,15 +2,12 @@ package com.mvvm.lux.framework.http;
 
 
 import com.google.gson.GsonBuilder;
-import com.mvvm.lux.framework.BaseApplication;
-import com.mvvm.lux.framework.BuildConfig;
-import com.mvvm.lux.framework.http.interceptor.CacheInterceptor;
-import com.mvvm.lux.framework.http.interceptor.HttpLoggingInterceptor;
+import com.mvvm.lux.framework.http.authenticator.CusSSLSocketFactory;
 
-import java.io.File;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -31,32 +28,15 @@ public class RetrofitExcuter {
      * okhttp全局配置,application初始化一次就可以了
      */
     public synchronized static void init() {
-
-        //设置Http缓存
-        BaseApplication context = BaseApplication.getAppContext();
-        Cache cache = new Cache(new File(context.getCacheDir(), "http_cache"), 1024 * 1024 * 100);
-        CacheInterceptor cacheInterceptor = new CacheInterceptor(context, String.valueOf(60 * 60 * 6)); //缓存 cache-control 值
-
-        mOkHttpClient = new OkHttpClient.Builder()
-                .cache(cache)
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(20, TimeUnit.SECONDS)
-                .addInterceptor(cacheInterceptor)
-                .addNetworkInterceptor(cacheInterceptor)
-                .addInterceptor(new HttpLoggingInterceptor("logger"))
-                .retryOnConnectionFailure(true) //重试机制
-                .build();
-    }
-
-    public synchronized static void initOk() {
         mOkHttpClient = new OkHttpBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true) //重试机制
-                .addLog(BuildConfig.DEBUG) //用于输出网络请求和结果log的拦截器
+                .addLog(true) //用于输出网络请求和结果log的拦截器
                 .addCache(true)
+                .addSSLSocketFactory(CusSSLSocketFactory.getUnsafeOkHttpClient())  //不安全证书
+                .addHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER) //信任所有证书
                 .build();
         //.addCookie(true)    //持久化cookie
         //.addConverterFactory(MyGsonConverterFactory.create())
