@@ -31,7 +31,7 @@ public class BaseUrl {
 
     public static final String HDSLB_HOST = "http://i2.hdslb.com";
 
-    public static final String COMMON_UA_STR = "OhMyBiliBili Android Client/2.1 (100332338@qq.com)";
+    public static final String COMMON_UA_STR = "http://images.dmzj.com/";
 
     public static final String X_LC_Id = "i7j2k7bm26g7csk7uuegxlvfyw79gkk4p200geei8jmaevmx";
 
