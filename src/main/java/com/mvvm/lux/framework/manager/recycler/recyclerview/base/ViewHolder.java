@@ -2,6 +2,8 @@ package com.mvvm.lux.framework.manager.recycler.recyclerview.base;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -24,14 +26,22 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     private SparseArray<View> mViews;
     private View mConvertView;
     private Context mContext;
+    public ViewDataBinding mDataBinding;
 
     public ViewHolder(Context context, View itemView) {
         super(itemView);
         mContext = context;
         mConvertView = itemView;
-        mViews = new SparseArray<View>();
+        mViews = new SparseArray<>();
     }
 
+    public ViewHolder(Context context, ViewDataBinding dataBinding) {
+        super(dataBinding.getRoot());
+        mContext = context;
+        mDataBinding = dataBinding;
+        mConvertView = mDataBinding.getRoot();
+        mViews = new SparseArray<>();
+    }
 
     public static ViewHolder createViewHolder(Context context, View itemView) {
         return new ViewHolder(context, itemView);
@@ -39,9 +49,9 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public static ViewHolder createViewHolder(Context context,
                                               ViewGroup parent, int layoutId) {
-        View itemView = LayoutInflater.from(context).inflate(layoutId, parent,
-                false);
-        return new ViewHolder(context, itemView);
+//        View itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
+        ViewDataBinding dataBinding = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId, parent, false);
+        return new ViewHolder(context, dataBinding);
     }
 
     /**
