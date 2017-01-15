@@ -3,6 +3,7 @@ package com.mvvm.lux.framework.http;
 import android.content.Context;
 
 import com.mvvm.lux.framework.BaseApplication;
+import com.mvvm.lux.framework.http.authenticator.HttpsFactroy;
 import com.mvvm.lux.framework.http.cookie.CookieManger;
 import com.mvvm.lux.framework.http.interceptor.BaseInterceptor;
 import com.mvvm.lux.framework.http.interceptor.CacheInterceptor;
@@ -212,7 +213,7 @@ public class OkHttpBuilder {
             okHttpBuilder.cache(cache);
 
         if (isLog)
-            okHttpBuilder.addInterceptor(new HttpLoggingInterceptor("logger_record"));
+            okHttpBuilder.addInterceptor(new HttpLoggingInterceptor("logger"));
 
         if (isCookie && cookieManager == null)
             okHttpBuilder.cookieJar(new CookieManger(context));

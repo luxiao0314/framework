@@ -1,4 +1,4 @@
-package com.mvvm.lux.framework.http;
+package com.mvvm.lux.framework.http.authenticator;
 
 import android.content.Context;
 
@@ -31,7 +31,7 @@ public class HttpsFactroy {
      * set SSLSocketFactory
      * {@link HostnameVerifier}
      */
-    protected static SSLSocketFactory getSSLSocketFactory(Context context, int[] certificates) {
+    public static SSLSocketFactory getSSLSocketFactory(Context context, int[] certificates) {
 
         if (context == null) {
             throw new NullPointerException("context == null");
@@ -75,7 +75,7 @@ public class HttpsFactroy {
      * set HostnameVerifier
      * {@link HostnameVerifier}
      */
-    protected static HostnameVerifier getHostnameVerifier(final String[] hostUrls) {
+    public static HostnameVerifier getHostnameVerifier(final String[] hostUrls) {
 
             HostnameVerifier TRUSTED_VERIFIER = new HostnameVerifier() {
 

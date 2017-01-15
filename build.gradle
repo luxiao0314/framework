@@ -24,6 +24,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 
 }
@@ -47,7 +52,6 @@ dependencies {
     compile viewDependencies.retrofit2Gson
     compile viewDependencies.retrofit2Rxjava
     compile viewDependencies.okhttp3
-    compile viewDependencies.okhttp3Loging
     compile viewDependencies.okhttp3Loging
 
     //fresco
