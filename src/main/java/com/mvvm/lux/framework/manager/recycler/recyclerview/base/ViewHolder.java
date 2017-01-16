@@ -47,8 +47,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return new ViewHolder(context, itemView);
     }
 
-    public static ViewHolder createViewHolder(Context context,
-                                              ViewGroup parent, int layoutId) {
+    public static ViewHolder createViewHolder(Context context, ViewGroup parent, int layoutId) {
 //        View itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
         ViewDataBinding dataBinding = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId, parent, false);
         return new ViewHolder(context, dataBinding);
