@@ -236,7 +236,7 @@ public class CommonUtils {
         return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 
-    public static String conNum(int num, Integer digit) {
+    public static String conNum(long num, Integer digit) {
         if (num < 100000) {
             return num + "";
         }

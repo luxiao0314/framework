@@ -34,6 +34,7 @@ public class DateUtil {
     public static final String DATETIME_PATTERN_5_1 = "MM-dd";
     public static final String DATETIME_PATTERN_5_2 = "yyyy-MM";
     public static final String DATETIME_PATTERN_6_1 = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATETIME_PATTERN_6_2 = "HH:mm";
 
     /**
      * 获取任意一段时间内的简单日历,主要包含日期和星期对应关系
@@ -163,11 +164,13 @@ public class DateUtil {
         Date curDate = new Date(System.currentTimeMillis());//获取当前时间
         return formatter.format(curDate);
     }
+
     public static String getCurrentTime(String format) {
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         Date curDate = new Date(System.currentTimeMillis());//获取当前时间
         return formatter.format(curDate);
     }
+
     /**
      * 将字符串转为时间戳
      *
@@ -188,6 +191,7 @@ public class DateUtil {
         }
         return re_time;
     }
+
     /**
      * 将字符串转为时间戳
      *
@@ -283,7 +287,7 @@ public class DateUtil {
     }
 
 
-    public static Date parseDateTime(String time,String pattern) {
+    public static Date parseDateTime(String time, String pattern) {
         long l = 0;
         if (!TextUtils.isEmpty(time)) {
             SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -298,6 +302,7 @@ public class DateUtil {
         }
         return new Date(l);
     }
+
     /**
      * 将毫秒值转换成yyyy-MM-dd hh:mm:ss 格式
      *
@@ -485,12 +490,14 @@ public class DateUtil {
         }
         return "";
     }
+
     /**
      * Date转换成String:yyyy-MM-dd HH:mm
+     *
      * @param date
      * @return
      */
-    public static String getDate(Date date ,String format) {
+    public static String getDate(Date date, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(date);
     }

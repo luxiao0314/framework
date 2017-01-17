@@ -6,7 +6,7 @@ package com.mvvm.lux.framework.http.rxdownload.entity;
  * Time: 10:49
  * FIXME
  */
-public class DownloadEvent {
+public class  DownloadEvent {
     private int flag = DownloadFlag.NORMAL;
     private DownloadStatus downloadStatus = new DownloadStatus();
     private Throwable mError;

@@ -65,6 +65,11 @@ public class Router {
         return this;
     }
 
+    public Router putInt(@Nullable String key, int value) {
+        getBundleData().putInt(key, value);
+        return this;
+    }
+
     public Router putFloat(@Nullable String key, float value) {
         getBundleData().putFloat(key, value);
         return this;

@@ -1,6 +1,7 @@
 package com.mvvm.lux.framework.manager.dialogs;
 
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.widget.AbsListView;
 
 import com.mvvm.lux.framework.manager.dialogs.config.BaseTask;
@@ -73,8 +74,8 @@ public class DialogManager {
         return null;
     }
 
-    public static void showCustomDialog(BaseTask baseTask){
-        JayneHatDialogFragment.show(baseTask);
+    public static void showCustomDialog(FragmentActivity activity){
+        JayneHatDialogFragment.show(activity);
     }
 
     private static DialogFragment multipleChoiceListDialog(BaseTask baseTask) {
