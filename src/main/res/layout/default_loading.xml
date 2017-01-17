@@ -4,6 +4,7 @@
         xmlns:bind="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
+        android:id="@+id/load_more_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -11,8 +12,8 @@
         android:padding="8dp">
 
         <ProgressBar
-            android:layout_width="32dp"
-            android:layout_height="32dp"/>
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
 
         <TextView
             android:id="@+id/loading_text"
