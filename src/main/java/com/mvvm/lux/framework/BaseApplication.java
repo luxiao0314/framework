@@ -7,10 +7,14 @@ import android.os.Process;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mvvm.lux.framework.http.RetrofitExcuter;
 import com.mvvm.lux.framework.http.fresco.ImageLoaderConfig;
+import com.mvvm.lux.framework.manager.RealmHelper;
 import com.mvvm.lux.framework.utils.Logger;
 
 import java.util.LinkedList;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.rx.RealmObservableFactory;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -46,8 +50,28 @@ public class BaseApplication extends Application {
                         RetrofitExcuter.init();
                         Fresco.initialize(BaseApplication.this, ImageLoaderConfig.getImagePipelineConfig(BaseApplication.this));
                         Logger.e(content + "-" + Thread.currentThread().getName());
+
+                        //蒲公英crash上报
+                        //PgyCrashManager.register(this);
+                        //初始化内存泄漏检测
+                        //LeakCanary.install(this);
+                        //初始化过度绘制检测
+                        //BlockCanary.install(this, new AppBlockCanaryContext()).start();
+                        //初始化realm
+                        initRealm();
                     }
                 });
+    }
+
+    private void initRealm() {
+        Realm.init(this);
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                .name(RealmHelper.DB_NAME)
+                .schemaVersion(1)
+                .rxFactory(new RealmObservableFactory())
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(realmConfiguration);
     }
 
     public static synchronized BaseApplication getAppContext() {
