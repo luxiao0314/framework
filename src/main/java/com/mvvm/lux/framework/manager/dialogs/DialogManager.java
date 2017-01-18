@@ -32,8 +32,8 @@ public class DialogManager {
         return ProgressDialogFragment.createBuilder(baseTask)
                 .setMessage(baseTask.getProgressContent())
                 .setRequestCode(REQUEST_PROGRESS)
-                .setProgressType(baseTask.getDialogType()) //gif图
-                .useThemeType(3)    //进度条背景透明
+                .setProgressType(2)
+                .useThemeType(3)    //进度条主题:背景透明
                 .setCancelableOnTouchOutside(false) //点击屏幕不取消
                 .showAllowingStateLoss();
     }

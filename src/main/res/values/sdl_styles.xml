@@ -95,7 +95,7 @@
 
     <style name="SDL.Layout.Progress">
         <item name="android:gravity">center_vertical</item>
-        <item name="android:orientation">horizontal</item>
+        <item name="android:orientation">vertical</item>
     </style>
 
     <style name="SDL.ScrollView">
@@ -220,10 +220,8 @@
     </style>
 
     <style name="SDL.Progress" parent="Widget.AppCompat.ProgressBar">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">@dimen/grid_1</item>
-        <item name="android:layout_marginLeft">@dimen/grid_4</item>
         <item name="android:layout_marginTop">@dimen/grid_4</item>
         <item name="android:layout_marginBottom">@dimen/grid_4</item>
     </style>
