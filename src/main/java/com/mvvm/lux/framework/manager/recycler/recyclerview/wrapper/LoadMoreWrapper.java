@@ -58,7 +58,7 @@ public class LoadMoreWrapper<T> extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (isShowLoadMore(position)) {
             if (mOnLoadMoreListener != null) {
-                mOnLoadMoreListener.onLoadMoreRequested();
+                mOnLoadMoreListener.onLoadMoreRequested(position);
             }
             return;
         }
@@ -109,7 +109,7 @@ public class LoadMoreWrapper<T> extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     public interface OnLoadMoreListener {
-        void onLoadMoreRequested();
+        void onLoadMoreRequested(int position);
     }
 
     private OnLoadMoreListener mOnLoadMoreListener;

@@ -21,14 +21,15 @@ public abstract class ProgressSubscriber<T> extends RxSubscriber<T> implements P
     private DialogFragment mDialogFragment;
 
     public ProgressSubscriber(BaseTask serviceTask) {
-        serviceTask.setOnCancelProgress(this);
+        if (serviceTask != null)
+            serviceTask.setOnCancelProgress(this);
         mServiceTask = serviceTask;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (mDialogFragment == null) {
+        if (mDialogFragment == null && mServiceTask != null) {
             mDialogFragment = DialogManager.showProgressDialog(mServiceTask);
         }
     }

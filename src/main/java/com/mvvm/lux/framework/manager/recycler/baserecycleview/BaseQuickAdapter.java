@@ -17,6 +17,8 @@ package com.mvvm.lux.framework.manager.recycler.baserecycleview;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -89,6 +91,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
     public static final int LOADING_VIEW = 0x00000222;
     public static final int FOOTER_VIEW = 0x00000333;
     public static final int EMPTY_VIEW = 0x00000555;
+    private ViewDataBinding mDataBinding;
 
     @IntDef({ALPHAIN, SCALEIN, SLIDEIN_BOTTOM, SLIDEIN_LEFT, SLIDEIN_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
@@ -612,7 +615,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
         switch (viewType) {
             case 0:
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()),positions);
                 break;
             case LOADING_VIEW:
                 mLoadMoreView.convert(holder);
@@ -624,7 +627,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             case FOOTER_VIEW:
                 break;
             default:
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()));
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()), positions);
                 break;
         }
     }
@@ -645,7 +648,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return new ViewHolder
      */
     protected K createBaseViewHolder(View view) {
-        return (K) new BaseViewHolder(view);
+        return (K) new BaseViewHolder(view,mDataBinding);
     }
 
     /**
@@ -934,7 +937,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_LOADING);
         if (!mLoading) {
             mLoading = true;
-            mRequestLoadMoreListener.onLoadMoreRequested();
+            mRequestLoadMoreListener.onLoadMoreRequested(position);
         }
     }
 
@@ -980,13 +983,17 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      * @return view will be return
      */
     protected View getItemView(int layoutResId, ViewGroup parent) {
+        mDataBinding = DataBindingUtil.inflate(mLayoutInflater, layoutResId, parent, false);
+        if (mDataBinding != null) {
+            return mDataBinding.getRoot();
+        }
         return mLayoutInflater.inflate(layoutResId, parent, false);
     }
 
 
     public interface RequestLoadMoreListener {
 
-        void onLoadMoreRequested();
+        void onLoadMoreRequested(int position);
 
     }
 
@@ -996,28 +1003,29 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param animationType One of {@link #ALPHAIN}, {@link #SCALEIN}, {@link #SLIDEIN_BOTTOM}, {@link #SLIDEIN_LEFT}, {@link #SLIDEIN_RIGHT}.
      */
-    public void openLoadAnimation(@AnimationType int animationType) {
+    public BaseQuickAdapter<T, K> openLoadAnimation(@AnimationType int animationType) {
         this.mOpenAnimationEnable = true;
         mCustomAnimation = null;
         switch (animationType) {
             case ALPHAIN:
                 mSelectAnimation = new AlphaInAnimation();
-                break;
+                return this;
             case SCALEIN:
                 mSelectAnimation = new ScaleInAnimation();
-                break;
+                return this;
             case SLIDEIN_BOTTOM:
                 mSelectAnimation = new SlideInBottomAnimation();
-                break;
+                return this;
             case SLIDEIN_LEFT:
                 mSelectAnimation = new SlideInLeftAnimation();
-                break;
+                return this;
             case SLIDEIN_RIGHT:
                 mSelectAnimation = new SlideInRightAnimation();
-                break;
+                return this;
             default:
                 break;
         }
+        return this;
     }
 
     /**
@@ -1025,16 +1033,18 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
      *
      * @param animation ObjectAnimator
      */
-    public void openLoadAnimation(BaseAnimation animation) {
+    public BaseQuickAdapter<T, K> openLoadAnimation(BaseAnimation animation) {
         this.mOpenAnimationEnable = true;
         this.mCustomAnimation = animation;
+        return this;
     }
 
     /**
      * To open the animation when loading
      */
-    public void openLoadAnimation() {
+    public BaseQuickAdapter<T, K> openLoadAnimation() {
         this.mOpenAnimationEnable = true;
+        return this;
     }
 
     /**
@@ -1048,11 +1058,11 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
 
     /**
      * Implement this method and use the helper to adapt the view to the given item.
-     *
-     * @param helper A fully initialized helper.
+     *  @param helper A fully initialized helper.
      * @param item   The item that needs to be displayed.
+     * @param positions
      */
-    protected abstract void convert(K helper, T item);
+    protected abstract void convert(K helper, T item, int positions);
 
     /**
      * Get the row id associated with the specified position in the list.

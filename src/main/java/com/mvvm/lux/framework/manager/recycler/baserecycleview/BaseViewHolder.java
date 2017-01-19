@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Joan Zapata
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,7 @@
  */
 package com.mvvm.lux.framework.manager.recycler.baserecycleview;
 
+import android.databinding.ViewDataBinding;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -60,10 +61,12 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * Package private field to retain the associated user object and detect a change
      */
     Object associatedObject;
+    public ViewDataBinding mDataBinding;
 
 
-    public BaseViewHolder(View view) {
+    public BaseViewHolder(View view, ViewDataBinding dataBinding) {
         super(view);
+        mDataBinding = dataBinding;
         this.views = new SparseArray<View>();
         this.childClickViewIds = new LinkedHashSet<>();
         this.itemChildLongClickViewIds = new LinkedHashSet<>();
@@ -76,7 +79,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     public HashSet<Integer> getChildClickViewIds() {
-        return  childClickViewIds;
+        return childClickViewIds;
     }
 
     public View getConvertView() {
@@ -110,7 +113,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param imageResId The image resource id.
      * @return The BaseViewHolder for chaining.
      */
-    public BaseViewHolder setImageResource(int viewId,@DrawableRes int imageResId) {
+    public BaseViewHolder setImageResource(int viewId, @DrawableRes int imageResId) {
         ImageView view = getView(viewId);
         view.setImageResource(imageResId);
         return this;
@@ -339,7 +342,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param viewId
      * @return
      */
-    public BaseViewHolder addOnLongClickListener(int viewId){
+    public BaseViewHolder addOnLongClickListener(int viewId) {
         itemChildLongClickViewIds.add(viewId);
         return this;
     }
