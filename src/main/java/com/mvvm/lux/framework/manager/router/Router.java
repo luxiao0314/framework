@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import com.mvvm.lux.framework.R;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -19,8 +21,8 @@ public class Router {
     private Class<?> to;
     private Bundle data;
     private int requestCode = -1;
-    private int enterAnim = Router.RES_NONE;
-    private int exitAnim = Router.RES_NONE;
+    private int enterAnim = R.anim.anim_fragment_in;
+    private int exitAnim = R.anim.anim_fragment_out;
 
     public static final int RES_NONE = -1;
 
