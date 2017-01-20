@@ -33,6 +33,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -64,14 +66,24 @@ public abstract class BaseDialogFragment extends DialogFragment implements Dialo
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         int theme = resolveTheme();
         Dialog dialog = new Dialog(getActivity(), theme);
-
         Bundle args = getArguments();
         if (args != null) {
             dialog.setCanceledOnTouchOutside(
                     args.getBoolean(BaseDialogBuilder.ARG_CANCELABLE_ON_TOUCH_OUTSIDE));
         }
         dialog.setOnShowListener(this);
+        //将Dialog设置全屏！！！
+        setParams(dialog);
         return dialog;
+    }
+
+    private  void setParams(Dialog dialog){
+        Window window = dialog.getWindow();
+        window.getDecorView().setPadding(0, 0, 0, 0); //消除边距
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;   //设置宽度充满屏幕
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
     }
 
     @Override
