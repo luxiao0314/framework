@@ -174,6 +174,7 @@ public class Router {
 
     public static void pop(Activity activity) {
         activity.finish();
+        activity.overridePendingTransition(R.anim.anim_fragment_close_in, R.anim.anim_fragment_close_out);
     }
 
     public static void setCallback(RouterCallback callback) {

@@ -5,6 +5,8 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
 import android.view.View;
 
+import com.mvvm.lux.framework.manager.router.Router;
+
 import java.io.Serializable;
 
 import rx.Subscription;
@@ -32,7 +34,7 @@ public class BaseViewModel extends BaseObservable implements Serializable {
     public View.OnClickListener back = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivity.finish();
+            Router.pop(mActivity);
         }
     };
 

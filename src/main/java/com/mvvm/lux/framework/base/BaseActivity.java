@@ -2,11 +2,13 @@ package com.mvvm.lux.framework.base;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.mvvm.lux.framework.BaseApplication;
 import com.mvvm.lux.framework.config.MarkAble;
+import com.mvvm.lux.framework.manager.router.Router;
 import com.mvvm.lux.framework.utils.Logger;
 
 import me.yokeyword.fragmentation.SupportActivity;
@@ -97,5 +99,11 @@ public abstract class BaseActivity<T extends BaseViewModel> extends SupportActiv
             }
             win.setAttributes(winParams);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Router.pop(this);
+        return super.onKeyDown(keyCode, event);
     }
 }
