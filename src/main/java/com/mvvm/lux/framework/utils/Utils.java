@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -138,5 +139,37 @@ public class Utils {
 
     private static String contentRange(Response<?> response) {
         return response.headers().get("Content-Range");
+    }
+
+    /**
+     * 通过反射获取参数类型
+     * @param o
+     * @param i
+     * @param <T>
+     * @return
+     */
+    public static <T> T getParamsT(Object o, int i) {
+        try {
+            return ((Class<T>) ((ParameterizedType) (o.getClass()//获得该类
+                    .getGenericSuperclass())) //getGenericSuperclass()获得带有泛型的父类
+                    .getActualTypeArguments()[i])   //getActualTypeArguments获取参数化类型的数组，泛型可能有多个
+                    .newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Class<?> forName(String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
