@@ -2,6 +2,7 @@ package com.mvvm.lux.framework.base;
 
 import android.app.Activity;
 import android.databinding.BaseObservable;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.view.View;
 
@@ -24,6 +25,8 @@ public class BaseViewModel extends BaseObservable implements Serializable {
     protected CompositeSubscription mCompositeSubscription;
 
     public ObservableField<String> title = new ObservableField<>();
+
+    public ObservableBoolean downloadImg = new ObservableBoolean(true);
 
     public Activity mActivity;
 

@@ -7,14 +7,12 @@ import android.os.Process;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mvvm.lux.framework.http.RetrofitExcuter;
 import com.mvvm.lux.framework.http.fresco.ImageLoaderConfig;
-import com.mvvm.lux.framework.manager.RealmHelper;
 import com.mvvm.lux.framework.utils.Logger;
 
 import java.util.LinkedList;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.rx.RealmObservableFactory;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -66,9 +64,9 @@ public class BaseApplication extends Application {
     private void initRealm() {
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .name(RealmHelper.DB_NAME)
-                .schemaVersion(1)
-                .rxFactory(new RealmObservableFactory())
+                .name("lux.realm")
+//                .schemaVersion(1)
+//                .rxFactory(new RealmObservableFactory())
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
