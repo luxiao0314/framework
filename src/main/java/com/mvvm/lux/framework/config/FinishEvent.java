@@ -10,4 +10,9 @@ import com.mvvm.lux.framework.base.BaseEvent;
  * @Version
  */
 public class FinishEvent extends BaseEvent {
+    public String mName;
+
+    public FinishEvent(String name) {
+        mName = name;
+    }
 }

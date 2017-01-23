@@ -6,14 +6,11 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.view.View;
 
-import com.mvvm.lux.framework.config.FinishEvent;
 import com.mvvm.lux.framework.manager.router.Router;
-import com.mvvm.lux.framework.rx.RxBus;
 
 import java.io.Serializable;
 
 import rx.Subscription;
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -25,7 +22,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class BaseViewModel extends BaseObservable implements Serializable {
 
-    protected CompositeSubscription mCompositeSubscription;
+    private CompositeSubscription mCompositeSubscription;
 
     public ObservableField<String> title = new ObservableField<>();
 
@@ -35,18 +32,6 @@ public class BaseViewModel extends BaseObservable implements Serializable {
 
     public BaseViewModel(Activity activity) {
         mActivity = activity;
-        initEvent();
-    }
-
-    private void initEvent() {
-        RxBus.init()
-                .toObservableSticky(FinishEvent.class)
-                .subscribe(new Action1<FinishEvent>() {
-                    @Override
-                    public void call(FinishEvent finishEvent) {
-                        detachView();
-                    }
-                });
     }
 
     public View.OnClickListener back = new View.OnClickListener() {
@@ -56,7 +41,7 @@ public class BaseViewModel extends BaseObservable implements Serializable {
         }
     };
 
-    protected void unSubscribe() {
+    private void unSubscribe() {
         if (mCompositeSubscription != null) {
             mCompositeSubscription.unsubscribe();
         }
@@ -69,7 +54,7 @@ public class BaseViewModel extends BaseObservable implements Serializable {
         mCompositeSubscription.add(subscription);
     }
 
-    public void detachView() {
+    protected void detachView() {
         unSubscribe();
     }
 }

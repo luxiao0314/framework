@@ -7,8 +7,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import com.mvvm.lux.framework.R;
-import com.mvvm.lux.framework.config.FinishEvent;
-import com.mvvm.lux.framework.rx.RxBus;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -175,7 +173,6 @@ public class Router {
     }
 
     public static void pop(Activity activity) {
-        RxBus.init().postSticky(new FinishEvent());
         activity.finish();
         activity.overridePendingTransition(R.anim.anim_fragment_close_in, R.anim.anim_fragment_close_out);
     }

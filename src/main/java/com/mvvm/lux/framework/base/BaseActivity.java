@@ -73,8 +73,6 @@ public abstract class BaseActivity<T extends BaseViewModel> extends SupportActiv
         super.onDestroy();
         Logger.d(this.getClass().getName(), this.getClass().getName() + "------>onDestroy");
         BaseApplication.getAppContext().unregisterActivity(this);
-        if (mViewModel != null)
-            mViewModel.detachView();
     }
 
     @Override
