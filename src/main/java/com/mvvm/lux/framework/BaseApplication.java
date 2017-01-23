@@ -13,6 +13,7 @@ import java.util.LinkedList;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.rx.RealmObservableFactory;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -65,8 +66,8 @@ public class BaseApplication extends Application {
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name("lux.realm")
-//                .schemaVersion(1)
-//                .rxFactory(new RealmObservableFactory())
+                .schemaVersion(1)
+                .rxFactory(new RealmObservableFactory())
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
