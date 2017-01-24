@@ -9,6 +9,7 @@ import android.os.StatFs;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Random;
 
 import okhttp3.RequestBody;
@@ -247,6 +248,13 @@ public class CommonUtils {
             return numStr + unit;
         }
         return newNum + unit;
+    }
+
+    public static boolean isNotNull(List list){
+        if (list != null && list.size() > 0) {
+            return true;
+        }
+        return false;
     }
 
 }
