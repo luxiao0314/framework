@@ -11,6 +11,7 @@ import com.mvvm.lux.framework.config.MarkAble;
 import com.mvvm.lux.framework.manager.router.Router;
 import com.mvvm.lux.framework.utils.Logger;
 
+import io.realm.Realm;
 import me.yokeyword.fragmentation.SupportActivity;
 
 /**
@@ -72,6 +73,9 @@ public abstract class BaseActivity<T extends BaseViewModel> extends SupportActiv
     protected void onDestroy() {
         super.onDestroy();
         Logger.d(this.getClass().getName(), this.getClass().getName() + "------>onDestroy");
+        if (!Realm.getDefaultInstance().isClosed()) {
+            Realm.getDefaultInstance().close();
+        }
         BaseApplication.getAppContext().unregisterActivity(this);
     }
 

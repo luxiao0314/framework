@@ -1,10 +1,12 @@
 package com.mvvm.lux.framework.base;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.View;
 
-import com.mvvm.lux.framework.R;
-import com.mvvm.lux.framework.widget.SwipeBackLayout;
+import com.mvvm.lux.framework.utils.Utils;
+import com.mvvm.lux.framework.widget.swipeback.SwipeBackActivityBase;
+import com.mvvm.lux.framework.widget.swipeback.SwipeBackActivityHelper;
+import com.mvvm.lux.framework.widget.swipeback.SwipeBackLayout;
 
 
 /**
@@ -16,23 +18,47 @@ import com.mvvm.lux.framework.widget.SwipeBackLayout;
  * @Date 2017/1/4 15:02
  * @Version
  */
-public abstract class SwipeBackActivity extends BaseActivity {
-    private SwipeBackLayout swipeBackLayout;
+public class SwipeBackActivity extends BaseActivity implements SwipeBackActivityBase {
+    private SwipeBackActivityHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        swipeBackLayout = (SwipeBackLayout) LayoutInflater.from(this).inflate(
-                R.layout.base, null);
-        swipeBackLayout.attachToActivity(this);
+        mHelper = new SwipeBackActivityHelper(this);
+        mHelper.onActivityCreate();
     }
 
-    //默认左滑
-    public void setDragEdge(SwipeBackLayout.DragEdge dragEdge) {
-        swipeBackLayout.setDragEdge(dragEdge);
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mHelper.onPostCreate();
     }
 
+    @Override
+    public View findViewById(int id) {
+        View v = super.findViewById(id);
+        if (v == null && mHelper != null)
+            return mHelper.findViewById(id);
+        return v;
+    }
+
+    @Override
     public SwipeBackLayout getSwipeBackLayout() {
-        return swipeBackLayout;
+        return mHelper.getSwipeBackLayout();
+    }
+
+    @Override
+    public void setSwipeBackEnable(boolean enable) {
+        getSwipeBackLayout().setEnableGesture(enable);
+    }
+
+    public void setEdge(int edgeFlags) {
+        getSwipeBackLayout().setEdgeTrackingEnabled(edgeFlags);
+    }
+
+    @Override
+    public void scrollToFinishActivity() {
+        Utils.convertActivityToTranslucent(this);
+        getSwipeBackLayout().scrollToFinishActivity();
     }
 }
