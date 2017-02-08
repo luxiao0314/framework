@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AbsListView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mvvm.lux.framework.manager.router.Router;
 
 import java.io.Serializable;
@@ -40,6 +43,29 @@ public class BaseViewModel extends BaseObservable implements Serializable {
             Router.pop(mActivity);
         }
     };
+
+    public RecyclerView.OnScrollListener onScrollListener() {
+        return new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int scrollState) {
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
+                    case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+                        //ImageLoader.pauseLoader();
+                        if (!Fresco.getImagePipeline().isPaused()) {
+                            Fresco.getImagePipeline().pause();
+                        }
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        //ImageLoader.resumeLoader();
+                        if (Fresco.getImagePipeline().isPaused()) {
+                            Fresco.getImagePipeline().resume();
+                        }
+                        break;
+                }
+            }
+        };
+    }
 
     private void unSubscribe() {
         if (mCompositeSubscription != null) {
