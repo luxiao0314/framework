@@ -110,6 +110,11 @@ public class RetrofitException {
             ex = new Throwable(resultException, resultException.code);
             ex.setMessage(resultException.message);
             return ex;
+        }else if (e instanceof CusException) {
+            CusException resultException = (CusException) e;
+            ex = new Throwable(resultException, resultException.code);
+            ex.setMessage(resultException.message);
+            return ex;
         } else {
             ex = new Throwable(e, ERROR.UNKNOWN);
             ex.setMessage("未知错误");

@@ -27,10 +27,27 @@ public class RxHelper {
             @Override
             public Observable<T> call(Observable<BaseResponse<T>> observable) {
                 return observable.flatMap(new <T>HandleResultFuc())    //将RxSubscriber中服务器异常处理换到这里,在RxSubscriber中处理onstart(),onCompleted().onError,onNext()
-                        .compose(schedulersTransformer()) //处理线程切换,注销Observable
+                        .compose(io_main()) //处理线程切换,注销Observable
                         .onErrorResumeNext(new HttpResponseFunc<T>())//判断异常
                         .retryWhen(new RetryWhenNetworkException());
 //                        .retryWhen(new TimeOutRetry())  //token过期的重试,有问题
+            }
+        };
+    }
+
+    /**
+     * 异常处理变压器
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> Observable.Transformer<T, T> handleErr() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> observable) {
+                return (Observable<T>) observable
+                        .compose(io_main()) //处理线程切换,注销Observable
+                        .onErrorResumeNext(new HttpResponseFunc<T>());//判断异常
             }
         };
     }
@@ -49,21 +66,6 @@ public class RxHelper {
 
     /**
      * 调度器,切换线程和注销Observable
-     */
-    public static <T> Observable.Transformer<T, T> schedulersTransformer() {
-        return new Observable.Transformer<T, T>() {
-            @Override
-            public Observable<T> call(Observable<T> tObservable) {
-                return tObservable
-                        .subscribeOn(Schedulers.io())
-                        .unsubscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
-            }
-        };
-    }
-
-    /**
-     * 统一线程处理
      *
      * @param <T>
      * @return
@@ -72,7 +74,10 @@ public class RxHelper {
         return new Observable.Transformer<T, T>() {
             @Override
             public Observable<T> call(Observable<T> tObservable) {
-                return tObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                return tObservable
+                        .subscribeOn(Schedulers.io())
+                        .unsubscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
