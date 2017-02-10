@@ -29,8 +29,11 @@ public abstract class ProgressSubscriber<T> extends RxSubscriber<T> implements P
     @Override
     public void onStart() {
         super.onStart();
-        if (mDialogFragment == null && mServiceTask != null) {
+        //不知道为什么activity会destroy了, 所以这里一直报错
+        if (mDialogFragment == null && mServiceTask != null && !mServiceTask.getContext().isDestroyed()) {
             mDialogFragment = DialogManager.showProgressDialog(mServiceTask);
+        } else {
+            dismissProgressDialog();
         }
     }
 
@@ -48,7 +51,7 @@ public abstract class ProgressSubscriber<T> extends RxSubscriber<T> implements P
 
     private void dismissProgressDialog() {
         if (mDialogFragment != null) {
-            mDialogFragment.dismiss();
+            mDialogFragment.dismissAllowingStateLoss();
         }
     }
 
