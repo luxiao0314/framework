@@ -180,4 +180,14 @@ public class Router {
     public static void setCallback(RouterCallback callback) {
         Router.callback = callback;
     }
+
+    interface RouterCallback {
+
+        void onBefore(Activity from, Class<?> to);
+
+        void OnNext(Activity from, Class<?> to);
+
+        void onError(Activity from, Class<?> to, Throwable throwable);
+
+    }
 }
