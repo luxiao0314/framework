@@ -105,7 +105,11 @@ public abstract class BaseActivity<T extends BaseViewModel> extends SupportActiv
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Router.pop(this);
-        return super.onKeyDown(keyCode, event);
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Router.pop(this);
+            return false;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 }
