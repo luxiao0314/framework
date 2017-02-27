@@ -184,4 +184,8 @@ public class HostJsScope {
     public static long passLongType (WebView view, long i) {
         return i;
     }
+
+    public static void imageClick(WebView view,String imgUrl, String position){
+        ImagePicsListActivity.entryGallery(view.getContext(),null,Integer.parseInt(position));
+    }
 }

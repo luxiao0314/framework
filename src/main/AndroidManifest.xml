@@ -10,6 +10,7 @@
             android:name=".http.rxdownload.function.DownloadService"/>
 
         <activity android:name=".manager.hybrid.BrowserActivity"/>
+        <activity android:name=".manager.hybrid.ImagePicsListActivity"/>
     </application>
 
 </manifest>

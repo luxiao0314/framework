@@ -21,7 +21,14 @@ import com.mvvm.lux.framework.base.BaseActivity;
 import com.mvvm.lux.framework.utils.CommonUtils;
 import com.mvvm.lux.framework.utils.StatusBarUtil;
 
-public class BrowserActivity extends BaseActivity implements IWebPageView{
+/**
+ * @Description 与h5交互的webView
+ * @Author luxiao418
+ * @Email luxiao418@pingan.com.cn
+ * @Date 2017/2/27 14:34
+ * @Version 1.0.0
+ */
+public class BrowserActivity extends BaseActivity implements IWebPageView {
 
     private String mTitle;
     private String mUrl;
@@ -65,7 +72,7 @@ public class BrowserActivity extends BaseActivity implements IWebPageView{
         webView.setInitialScale(1);
         // 告诉WebView启用JavaScript执行。默认的是false。
         ws.setJavaScriptEnabled(true);
-        //  页面加载好以后，再放开图片
+        //  页面加载好以后，再放开图片--
         ws.setBlockNetworkImage(false);
         // 使用localStorage则必须打开
         ws.setDomStorageEnabled(true);
@@ -81,12 +88,12 @@ public class BrowserActivity extends BaseActivity implements IWebPageView{
         /** 设置字体默认缩放大小(改变网页字体大小,setTextSize  api14被弃用)*/
         ws.setTextZoom(100);
 
-        mWebChromeClient = new InjectedChromeClient(this,"app_router",HostJsScope.class);
+        mWebChromeClient = new InjectedChromeClient(this, "injectedObject", HostJsScope.class);
         webView.setWebChromeClient(mWebChromeClient);
         // 与js交互
 //        webView.addJavascriptInterface(new ImageClickInterface(this), "injectedObject");
         //移除系统开放的JS接口,使用onJsPrompt方法做js_android交互
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             dealJavascriptLeak();
         }
         webView.setWebViewClient(new MyWebViewClient(this));
@@ -100,7 +107,7 @@ public class BrowserActivity extends BaseActivity implements IWebPageView{
     }
 
     private void initTitle() {
-        StatusBarUtil.setColor(this, CommonUtils.getColor(R.color.colorPrimary),0);
+        StatusBarUtil.setColor(this, CommonUtils.getColor(R.color.colorPrimary), 0);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_progress);
         webView = (WebView) findViewById(R.id.webview_detail);
         videoFullView = (FrameLayout) findViewById(R.id.video_fullView);
@@ -191,6 +198,7 @@ public class BrowserActivity extends BaseActivity implements IWebPageView{
                 "{" +
                 //  "objs[i].onclick=function(){alert(this.getAttribute(\"has_link\"));}" +
                 "objs[i].onclick=function(){window.injectedObject.imageClick(this.getAttribute(\"src\"),this.getAttribute(\"has_link\"));}" +
+//                "objs[i].onclick=function(){window.injectedObject.imageClick(this.getAttribute(\"src\"),i);}" +
                 "}" +
                 "})()");
 
