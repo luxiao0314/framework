@@ -8,6 +8,8 @@
                  android:supportsRtl="true">
         <service
             android:name=".http.rxdownload.function.DownloadService"/>
+
+        <activity android:name=".manager.hybrid.BrowserActivity"/>
     </application>
 
 </manifest>

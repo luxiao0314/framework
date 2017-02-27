@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mvvm.lux.framework.utils.Utils;
-import com.mvvm.lux.framework.widget.swipeback.SwipeBackActivityBase;
-import com.mvvm.lux.framework.widget.swipeback.SwipeBackActivityHelper;
-import com.mvvm.lux.framework.widget.swipeback.SwipeBackLayout;
+import com.mvvm.lux.widget.swipeback.SwipeBackActivityBase;
+import com.mvvm.lux.widget.swipeback.SwipeBackActivityHelper;
+import com.mvvm.lux.widget.swipeback.SwipeBackLayout;
 
 
 /**
