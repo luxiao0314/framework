@@ -46,9 +46,8 @@ dependencies {
     compile androidDependencies.design
 
     //rxjava
-    compile viewDependencies.rxjava
-    compile viewDependencies.rxandroid
-    compile viewDependencies.rxbinding
+//    compile viewDependencies.rxjava
+//    compile viewDependencies.rxandroid
 
     //retrofit
     compile viewDependencies.retrofit
@@ -61,8 +60,6 @@ dependencies {
     compile viewDependencies.fresco
     compile viewDependencies.frescoGif
     compile viewDependencies.frescoPhoto
-    compile viewDependencies.gpuImage
-    compile viewDependencies.scaleImage
     compile viewDependencies.frescoImagepipeline
 
     //glide
@@ -76,7 +73,7 @@ dependencies {
     compile 'me.yokeyword:fragmentation:0.7.9'
 
     //canary
-    compile 'com.github.markzhai:blockcanary-android:1.3.1'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
+//    compile 'com.github.markzhai:blockcanary-android:1.3.1'
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
+//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
 }
