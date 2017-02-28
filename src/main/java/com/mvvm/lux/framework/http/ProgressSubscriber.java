@@ -19,6 +19,7 @@ public abstract class ProgressSubscriber<T> extends RxSubscriber<T> implements P
 
     private BaseTask mServiceTask;
     private DialogFragment mDialogFragment;
+    private boolean isCache;
 
     public ProgressSubscriber(BaseTask serviceTask) {
         if (serviceTask != null)
@@ -29,12 +30,24 @@ public abstract class ProgressSubscriber<T> extends RxSubscriber<T> implements P
     @Override
     public void onStart() {
         super.onStart();
-        //不知道为什么activity会destroy了, 所以这里一直报错
-        if (mDialogFragment == null && mServiceTask != null && !mServiceTask.getContext().isDestroyed()) {
-            mDialogFragment = DialogManager.showProgressDialog(mServiceTask);
-        } else {
-            dismissProgressDialog();
-        }
+        showProgressDialog();
+         /*缓存并且有网*/
+        /*if (isCache && NetworkUtil.isNetworkAvailable()) {
+             *//*获取缓存数据*//*
+            CookieResulte cookieResulte = CookieDbUtil.getInstance().queryCookieBy(api.getUrl());
+            if (cookieResulte != null) {
+                long time = (System.currentTimeMillis() - cookieResulte.getTime()) / 1000;
+                if (time < api.getCookieNetWorkTime()) {
+                    onCacheNext(cookieResulte.getResulte());
+                    onCompleted();
+                    unsubscribe();
+                }
+            }
+        }*/
+    }
+
+    private void onCacheNext(String resulte) {
+
     }
 
     @Override
@@ -47,6 +60,49 @@ public abstract class ProgressSubscriber<T> extends RxSubscriber<T> implements P
     public void onError(Throwable e) {
         super.onError(e);
         dismissProgressDialog();
+        /*需要緩存并且本地有缓存才返回*/
+       /* if (isCache) {
+            Observable.just(api.getUrl()).subscribe(new Subscriber<String>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    errorDo(e);
+                }
+
+                @Override
+                public void onNext(String s) {
+                    *//*获取缓存数据*//*
+                    CookieResulte cookieResulte = CookieDbUtil.getInstance().queryCookieBy(s);
+                    if (cookieResulte == null) {
+                        throw new HttpTimeException("网络错误");
+                    }
+                    long time = (System.currentTimeMillis() - cookieResulte.getTime()) / 1000;
+                    if (time < api.getCookieNoNetWorkTime()) {
+                        if (mSubscriberOnNextListener.get() != null) {
+                            mSubscriberOnNextListener.get().onCacheNext(cookieResulte.getResulte());
+                        }
+                    } else {
+                        CookieDbUtil.getInstance().deleteCookie(cookieResulte);
+                        throw new HttpTimeException("网络错误");
+                    }
+                }
+            });
+        } else {
+            errorDo(e);
+        }*/
+    }
+
+    private void showProgressDialog() {
+        //不知道为什么activity会destroy了, 所以这里一直报错
+        if (mDialogFragment == null && mServiceTask != null && !mServiceTask.getContext().isDestroyed()) {
+            mDialogFragment = DialogManager.showProgressDialog(mServiceTask);
+        } else {
+            dismissProgressDialog();
+        }
     }
 
     private void dismissProgressDialog() {
