@@ -32,6 +32,7 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
 
     private String mTitle;
     private String mUrl;
+    private String mInjectedName;
     private ProgressBar mProgressBar;
     private FrameLayout videoFullView;
     private Toolbar mTitleToolBar;
@@ -88,7 +89,7 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
         /** 设置字体默认缩放大小(改变网页字体大小,setTextSize  api14被弃用)*/
         ws.setTextZoom(100);
 
-        mWebChromeClient = new InjectedChromeClient(this, "injectedObject", HostJsScope.class);
+        mWebChromeClient = new InjectedChromeClient(this, mInjectedName, HostJsScope.class);
         webView.setWebChromeClient(mWebChromeClient);
         // 与js交互
 //        webView.addJavascriptInterface(new ImageClickInterface(this), "injectedObject");
@@ -134,6 +135,7 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
         if (getIntent() != null) {
             mTitle = getIntent().getStringExtra("mTitle");
             mUrl = getIntent().getStringExtra("mUrl");
+            mInjectedName = getIntent().getStringExtra("injectedName");
         }
     }
 
@@ -347,6 +349,14 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
         Intent intent = new Intent(mContext, BrowserActivity.class);
         intent.putExtra("mUrl", mUrl);
         intent.putExtra("mTitle", mTitle);
+        mContext.startActivity(intent);
+    }
+
+    public static void launch(Context mContext, String mUrl, String mTitle,String injectedName) {
+        Intent intent = new Intent(mContext, BrowserActivity.class);
+        intent.putExtra("mUrl", mUrl);
+        intent.putExtra("mTitle", mTitle);
+        intent.putExtra("injectedName", injectedName);
         mContext.startActivity(intent);
     }
 }
