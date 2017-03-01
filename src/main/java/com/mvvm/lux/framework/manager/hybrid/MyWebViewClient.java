@@ -28,7 +28,7 @@ public class MyWebViewClient extends WebViewClient {
     public MyWebViewClient(IWebPageView mIWebPageView) {
         this.mIWebPageView = mIWebPageView;
         mActivity = (BrowserActivity) mIWebPageView;
-
+        mIWebPageView.startProgress();  //在shouldOverrideUrlLoading中并不执行,待优化
     }
 
     @SuppressWarnings("deprecation")
@@ -55,7 +55,6 @@ public class MyWebViewClient extends WebViewClient {
             }
             return true;
         }
-        mIWebPageView.startProgress();
         view.loadUrl(url);
         return false;
     }
