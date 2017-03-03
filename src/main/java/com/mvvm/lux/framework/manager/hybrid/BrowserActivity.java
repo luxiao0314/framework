@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -35,7 +36,6 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
     private String mInjectedName;
     private ProgressBar mProgressBar;
     private FrameLayout videoFullView;
-    private Toolbar mTitleToolBar;
     private WebView webView;
     private InjectedChromeClient mWebChromeClient;
     public boolean mProgress90;
@@ -47,30 +47,38 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
         setContentView(R.layout.activity_web_view);
         getIntentData();
         initTitle();
+        webSettings();
         initWebView();
         webView.loadUrl(mUrl);
     }
 
-    private void initWebView() {
-        mProgressBar.setVisibility(View.VISIBLE);
+    private void webSettings() {
         WebSettings ws = webView.getSettings();
+        //自动打开窗口
+        ws.setJavaScriptCanOpenWindowsAutomatically(true);
+        //提高渲染的优先级
+        ws.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        // 启动应用缓存
+        ws.setAppCacheEnabled(false);
+        //设置缓存路径,大小
+        ws.setAppCacheMaxSize(1024 * 1024 * 8);
+        String appCacheDir = Environment.getExternalStorageDirectory().getPath() + "/WebView_pingAn_binding";
+        ws.setAppCachePath(appCacheDir);
+        //支持插件
+        ws.setPluginState(WebSettings.PluginState.ON);
         // 网页内容的宽度是否可大于WebView控件的宽度
         ws.setLoadWithOverviewMode(false);
         // 保存表单数据
         ws.setSaveFormData(true);
-        // 是否应该支持使用其屏幕缩放控件和手势缩放
+        // 设置此属性，可任意比例缩放。
+        ws.setUseWideViewPort(true);
+        // 是否应该支持使用其屏幕缩放控件和手势缩放,但是不显示+号
         ws.setSupportZoom(true);
         ws.setBuiltInZoomControls(true);
         ws.setDisplayZoomControls(false);
-        // 启动应用缓存
-        ws.setAppCacheEnabled(true);
         // 设置缓存模式
         ws.setCacheMode(WebSettings.LOAD_DEFAULT);
         // setDefaultZoom  api19被弃用
-        // 设置此属性，可任意比例缩放。
-        ws.setUseWideViewPort(true);
-        // 缩放比例 1
-        webView.setInitialScale(1);
         // 告诉WebView启用JavaScript执行。默认的是false。
         ws.setJavaScriptEnabled(true);
         //  页面加载好以后，再放开图片--
@@ -81,22 +89,43 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
         ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         // WebView是否支持多个窗口。
         ws.setSupportMultipleWindows(true);
+        //设置字体默认缩放大小(改变网页字体大小,setTextSize  api14被弃用)
+        ws.setTextZoom(100);
+        //首先阻塞图片，让图片不显示,页面加载好以后，在放开图片,true不显示图片
+        ws.setBlockNetworkImage(true);
+        //设置WebView运行中的一个文件方案被允许访问其他文件方案中的内容，允许访问文件
+        ws.setAllowFileAccess(true);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            ws.setAllowUniversalAccessFromFileURLs(true);
+        }
+        if (Build.VERSION.SDK_INT >= 19) {
+            ws.setLoadsImagesAutomatically(true);
+        } else {
+            ws.setLoadsImagesAutomatically(false);
+        }
         // webview从5.0开始默认不允许混合模式,https中不能加载http资源,需要设置开启。
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-        /** 设置字体默认缩放大小(改变网页字体大小,setTextSize  api14被弃用)*/
-        ws.setTextZoom(100);
+    }
 
-        mWebChromeClient = new InjectedChromeClient(this, mInjectedName, HostJsScope.class);
-        webView.setWebChromeClient(mWebChromeClient);
-        // 与js交互
-//        webView.addJavascriptInterface(new ImageClickInterface(this), "injectedObject");
+    private void initWebView() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        // 缩放比例 1
+        webView.setInitialScale(1);
+        //去掉垂直滚动条
+        webView.setVerticalScrollBarEnabled(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            webView.setWebContentsDebuggingEnabled(true);
+        }
         //移除系统开放的JS接口,使用onJsPrompt方法做js_android交互
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             dealJavascriptLeak();
         }
+        // 与js交互
+        mWebChromeClient = new InjectedChromeClient(this, mInjectedName, HostJsScope.class);
+        webView.setWebChromeClient(mWebChromeClient);
         webView.setWebViewClient(new MyWebViewClient(this));
     }
 
@@ -112,8 +141,8 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
         mProgressBar = (ProgressBar) findViewById(R.id.pb_progress);
         webView = (WebView) findViewById(R.id.webview_detail);
         videoFullView = (FrameLayout) findViewById(R.id.video_fullView);
-        mTitleToolBar = (Toolbar) findViewById(R.id.title_tool_bar);
-        setSupportActionBar(mTitleToolBar);
+        Toolbar titleToolBar = (Toolbar) findViewById(R.id.title_tool_bar);
+        setSupportActionBar(titleToolBar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             //去除默认Title显示
@@ -122,8 +151,8 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         }
-        mTitleToolBar.setTitle(mTitle);
-        mTitleToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+        titleToolBar.setTitle(mTitle);
+        titleToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -133,8 +162,8 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
 
     private void getIntentData() {
         if (getIntent() != null) {
-            mTitle = getIntent().getStringExtra("mTitle");
-            mUrl = getIntent().getStringExtra("mUrl");
+            mTitle = getIntent().getStringExtra("title");
+            mUrl = getIntent().getStringExtra("url");
             mInjectedName = getIntent().getStringExtra("injectedName");
         }
     }
@@ -168,13 +197,18 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
     }
 
     @Override
-    public void showVideoFullView() {
-        videoFullView.setVisibility(View.VISIBLE);
+    public WebSettings getSetting() {
+        return webView.getSettings();
     }
 
     @Override
     public void hindVideoFullView() {
         videoFullView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showVideoFullView() {
+        videoFullView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -347,15 +381,15 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
      */
     public static void launch(Context mContext, String mUrl, String mTitle) {
         Intent intent = new Intent(mContext, BrowserActivity.class);
-        intent.putExtra("mUrl", mUrl);
-        intent.putExtra("mTitle", mTitle);
+        intent.putExtra("url", mUrl);
+        intent.putExtra("title", mTitle);
         mContext.startActivity(intent);
     }
 
-    public static void launch(Context mContext, String mUrl, String mTitle,String injectedName) {
+    public static void launch(Context mContext, String mUrl, String mTitle, String injectedName) {
         Intent intent = new Intent(mContext, BrowserActivity.class);
-        intent.putExtra("mUrl", mUrl);
-        intent.putExtra("mTitle", mTitle);
+        intent.putExtra("url", mUrl);
+        intent.putExtra("title", mTitle);
         intent.putExtra("injectedName", injectedName);
         mContext.startActivity(intent);
     }

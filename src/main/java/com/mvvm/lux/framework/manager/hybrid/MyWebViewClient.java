@@ -69,6 +69,7 @@ public class MyWebViewClient extends WebViewClient {
         if (!NetworkUtil.isNetworkAvailable()) {
             mIWebPageView.hindProgressBar();
         }
+        mIWebPageView.getSetting().setBlockNetworkImage(false);
         // html加载完成之后，添加监听图片的点击js函数
         mIWebPageView.addImageClickListener();
         super.onPageFinished(view, url);
