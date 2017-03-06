@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.webkit.ClientCertRequest;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -55,6 +56,7 @@ public class MyWebViewClient extends WebViewClient {
             }
             return true;
         }
+        view.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         view.loadUrl(url);
         return false;
     }
@@ -69,7 +71,7 @@ public class MyWebViewClient extends WebViewClient {
         if (!NetworkUtil.isNetworkAvailable()) {
             mIWebPageView.hindProgressBar();
         }
-        mIWebPageView.getSetting().setBlockNetworkImage(false);
+        view.getSettings().setBlockNetworkImage(false);
         // html加载完成之后，添加监听图片的点击js函数
         mIWebPageView.addImageClickListener();
         super.onPageFinished(view, url);

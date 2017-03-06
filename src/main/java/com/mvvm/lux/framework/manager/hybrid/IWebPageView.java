@@ -1,7 +1,6 @@
 package com.mvvm.lux.framework.manager.hybrid;
 
 import android.view.View;
-import android.webkit.WebSettings;
 
 /**
  * Created by jingbin on 2016/11/17.
@@ -39,7 +38,5 @@ public interface IWebPageView {
     void showVideoFullView();
 
     void hindVideoFullView();
-
-    WebSettings getSetting();
 
 }

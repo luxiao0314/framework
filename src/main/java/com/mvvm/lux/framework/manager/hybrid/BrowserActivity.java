@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
@@ -29,7 +31,7 @@ import com.mvvm.lux.framework.utils.StatusBarUtil;
  * @Date 2017/2/27 14:34
  * @Version 1.0.0
  */
-public class BrowserActivity extends BaseActivity implements IWebPageView {
+public class BrowserActivity extends BaseActivity implements IWebPageView, DownloadListener {
 
     private String mTitle;
     private String mUrl;
@@ -127,6 +129,7 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
         mWebChromeClient = new InjectedChromeClient(this, mInjectedName, HostJsScope.class);
         webView.setWebChromeClient(mWebChromeClient);
         webView.setWebViewClient(new MyWebViewClient(this));
+        webView.setDownloadListener(this);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -194,11 +197,6 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
         videoFullView = new FullscreenHolder(BrowserActivity.this);
         videoFullView.addView(view);
         decor.addView(videoFullView);
-    }
-
-    @Override
-    public WebSettings getSetting() {
-        return webView.getSettings();
     }
 
     @Override
@@ -323,6 +321,7 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
 
                 //返回网页上一页
             } else if (webView.canGoBack()) {
+                webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
                 webView.goBack();
                 return true;
 
@@ -392,5 +391,12 @@ public class BrowserActivity extends BaseActivity implements IWebPageView {
         intent.putExtra("title", mTitle);
         intent.putExtra("injectedName", injectedName);
         mContext.startActivity(intent);
+    }
+
+    @Override
+    public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 }
