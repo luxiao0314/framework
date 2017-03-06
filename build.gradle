@@ -38,6 +38,8 @@ android {
 dependencies {
     compile project(':frescoUtil')
     compile project(':widget')
+    compile project(':activityrouter')
+    apt project(':compiler')
 
     //UI
     compile androidDependencies.recyclerView
