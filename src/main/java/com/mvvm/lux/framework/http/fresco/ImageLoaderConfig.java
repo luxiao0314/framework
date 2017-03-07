@@ -92,8 +92,7 @@ public class ImageLoaderConfig {
             sImagePipelineConfig = OkHttpImagePipelineConfigFactory.newBuilder(context, RetrofitExcuter.getOkHttpClient())
 //            sImagePipelineConfig = ImagePipelineConfig.newBuilder(context)
                     .setBitmapsConfig(Bitmap.Config.RGB_565) // 若不是要求忒高清显示应用，就用使用RGB_565吧（默认是ARGB_8888)
-                    .setDownsampleEnabled(true) // 在解码时改变图片的大小，支持PNG、JPG以及WEBP格式的图片，与ResizeOptions配合使用
-                    .setDownsampleEnabled(true) //新的功能：Downsampling，它处理图片的速度比常规的裁剪更快
+                    .setDownsampleEnabled(true) //新的功能：Downsampling，它处理图片的速度比常规的裁剪更快,在解码时改变图片的大小，支持PNG、JPG以及WEBP格式的图片，与ResizeOptions配合使用
                     // 设置Jpeg格式的图片支持渐进式显示
                     .setProgressiveJpegConfig(new ProgressiveJpegConfig() {
                         @Override
@@ -106,7 +105,7 @@ public class ImageLoaderConfig {
                             return ImmutableQualityInfo.of(scanNumber, isGoodEnough, false);
                         }
                     })
-                    .setRequestListeners(requestListeners)
+                    .setRequestListeners(requestListeners)  //支持打印图片加载情况
                     .setNetworkFetcher(new ElnImageDownloaderFetcher()) //防盗链处理,添加header:Referer
                     .setMemoryTrimmableRegistry(memoryTrimmableRegistry) // 报内存警告时的监听
                     // 设置内存配置
