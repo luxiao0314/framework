@@ -6,11 +6,13 @@ import android.widget.Toast;
 import com.mvvm.lux.framework.BaseApplication;
 
 /**
- * 单例Toast
- * @author ex-caowanjiang001
- * 2016年1月4日14:35:30
+ * @Description 单例Toast
+ * @Author luxiao418
+ * @Email luxiao418@pingan.com.cn
+ * @Date 2017/3/9 14:28
+ * @Version
  */
-public class ToastUtil {
+public class ToastManager {
 
 	private static String oldMsg;
 	protected static Toast toast = null;

@@ -3,7 +3,6 @@ package com.mvvm.lux.framework.config;
 
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 
 import com.mvvm.lux.framework.config.session.SessionState;
 import com.mvvm.lux.framework.manager.dialogs.config.BaseTask;
@@ -62,6 +61,6 @@ public interface FrameworkSupport {
      */
     String getAppType();
 
-    DialogFragment showNetworkProcessDialog(BaseTask taskExchangeModel, FragmentManager fragmentManager, String tag);
+    DialogFragment showNetworkProcessDialog(BaseTask taskExchangeModel);
 
 }

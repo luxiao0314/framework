@@ -1,7 +1,7 @@
 package com.mvvm.lux.framework.http;
 
 import com.mvvm.lux.framework.utils.Logger;
-import com.mvvm.lux.framework.utils.ToastUtil;
+import com.mvvm.lux.framework.utils.ToastManager;
 
 import rx.Subscriber;
 
@@ -24,7 +24,7 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
 //        SnackbarUtil.showMessage(e.getMessage());
-        ToastUtil.showToast(e.getMessage());
+        ToastManager.showToast(e.getMessage());
         Logger.e(e.getMessage());
     }
 }
