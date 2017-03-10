@@ -1,13 +1,9 @@
-package com.mvvm.lux.framework.http;
+package com.mvvm.lux.framework.http.cookie;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mvvm.lux.framework.BaseApplication;
-import com.mvvm.lux.framework.http.cookie.CookieResulte;
-import com.mvvm.lux.framework.http.cookie.CookieResulteDao;
-import com.mvvm.lux.framework.http.cookie.DaoMaster;
-import com.mvvm.lux.framework.http.cookie.DaoSession;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
