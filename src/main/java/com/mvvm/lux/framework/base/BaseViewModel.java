@@ -29,7 +29,7 @@ public class BaseViewModel extends BaseObservable implements Serializable {
 
     public ObservableField<String> title = new ObservableField<>();
 
-    public ObservableBoolean downloadImg = new ObservableBoolean(true);
+    public ObservableBoolean downloadImg = new ObservableBoolean(false);
 
     public Activity mActivity;
 
