@@ -14,7 +14,7 @@ import com.mvvm.lux.framework.BaseApplication;
 public class SnackbarUtil {
 
     public static void showMessage(String text) {
-        Snackbar.make(BaseApplication.lastActivity().getCurrentFocus(), text, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(BaseApplication.lastActivity().getWindow().getDecorView(), text, Snackbar.LENGTH_SHORT).show();
     }
 
     public static void showMessage(View view, String text) {

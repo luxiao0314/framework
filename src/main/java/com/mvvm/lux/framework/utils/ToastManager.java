@@ -24,7 +24,7 @@ public class ToastManager {
 	 * @param context
 	 * @param s
      */
-	public static void showToast(Context context, String s) {
+	public static void showMessage(Context context, String s) {
 		if (toast == null) {
 			toast = Toast.makeText(context, s, Toast.LENGTH_SHORT);
 			toast.show();
@@ -48,7 +48,7 @@ public class ToastManager {
 	 * 弹吐司,指定时间间隔内不能弹出重复信息.
 	 * @param s
 	 */
-	public static void showToast(String s) {
+	public static void showMessage(String s) {
 		if (toast == null) {
 			toast = Toast.makeText(BaseApplication.getAppContext(), s, Toast.LENGTH_SHORT);
 			toast.show();
@@ -68,7 +68,7 @@ public class ToastManager {
 		oneTime = twoTime;
 	}
 
-	public static void showToast(String s, int type) {
+	public static void showMessage(String s, int type) {
 		if (toast == null) {
 			toast = Toast.makeText(BaseApplication.getAppContext(), s, type);
 			toast.show();
@@ -88,8 +88,8 @@ public class ToastManager {
 		oneTime = twoTime;
 	}
 
-	public static void showToast(int resId) {
-		showToast(BaseApplication.getAppContext(), BaseApplication.getAppContext().getString(resId));
+	public static void showMessage(int resId) {
+		showMessage(BaseApplication.getAppContext(), BaseApplication.getAppContext().getString(resId));
 	}
 
 }
