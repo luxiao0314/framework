@@ -1,9 +1,12 @@
 package com.mvvm.lux.framework.http;
 
 
+import com.google.gson.Gson;
+import com.mvvm.lux.framework.BaseApplication;
 import com.mvvm.lux.framework.http.base.BaseResponse;
 import com.mvvm.lux.framework.http.exception.RetrofitException;
 import com.mvvm.lux.framework.http.exception.RetryWhenNetworkException;
+import com.mvvm.lux.framework.utils.FileUtil;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -31,6 +34,49 @@ public class RxHelper {
                         .onErrorResumeNext(new HttpResponseFunc<T>())//判断异常
                         .retryWhen(new RetryWhenNetworkException());
 //                        .retryWhen(new TimeOutRetry())  //token过期的重试,有问题
+            }
+        };
+    }
+
+    /**
+     * 使用假数据
+     *
+     * @param virtualData
+     * @param <T>
+     * @return
+     */
+    public static <T> Observable.Transformer<BaseResponse<T>, T> handleVirtualData(final String virtualData) {
+        return new Observable.Transformer<BaseResponse<T>, T>() {
+            @Override
+            public Observable<T> call(Observable<BaseResponse<T>> observable) {
+                return (Observable<T>) observable.flatMap(new Func1<BaseResponse<T>, Observable<T>>() {
+                    @Override
+                    public Observable<T> call(BaseResponse<T> tBaseResponse) {
+                        String filepath = "virtualdata" + "/" + virtualData;
+                        String response = FileUtil.getJson(BaseApplication.getAppContext(), filepath);
+                        Gson gson = new Gson();
+                        T data = (T) gson.fromJson(response, tBaseResponse.getData().getClass());
+                        return HandleResultFuc.createData(data);
+                    }
+                }).compose(io_main());
+            }
+        };
+    }
+
+    public static <T> Observable.Transformer<T, T> handleVirtualDatas() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> observable) {
+                return (Observable<T>) observable.flatMap(new Func1<T, Observable<T>>() {
+                    @Override
+                    public Observable<T> call(T tBaseResponse) {
+                        String filepath = "virtualdata" + "/" + tBaseResponse.getClass().getSimpleName();
+                        String response = FileUtil.getJson(BaseApplication.getAppContext(), filepath);
+                        Gson gson = new Gson();
+                        T data = (T) gson.fromJson(response, tBaseResponse.getClass());
+                        return HandleResultFuc.createData(data);
+                    }
+                }).compose(io_main());
             }
         };
     }

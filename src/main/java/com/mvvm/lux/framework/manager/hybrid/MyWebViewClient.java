@@ -57,6 +57,12 @@ public class MyWebViewClient extends WebViewClient {
             return true;
         }
         view.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        if (url.contains("dmzjimage://?src=")) {
+            return true;
+        }
+        if (url.contains("dmzjandroid:")) {
+            url = url.replace("dmzjandroid:","");
+        }
         view.loadUrl(url);
         return false;
     }

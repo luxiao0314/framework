@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
@@ -37,7 +38,9 @@ import java.util.regex.Pattern;
  * https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
  */
 public class FileUtil {
-    /** TAG for log messages. */
+    /**
+     * TAG for log messages.
+     */
     static final String TAG = "FileUtils";
     private static final int DEFAULT_COMPRESS_QUALITY = 100;
     private static final String PATH_DOCUMENT = "document";
@@ -49,16 +52,21 @@ public class FileUtil {
     public static final String MIME_TYPE_VIDEO = "video/*";
     public static final String MIME_TYPE_APP = "application/*";
     private static final String DEFAULT_FILENAME = "novatedownfile";
-    /**content disposition */
+    /**
+     * content disposition
+     */
     private static final Pattern CONTENT_DISPOSITION_PATTERN = Pattern.compile(
             "attachment;\\s*filename\\s*=\\s*(\"?)([^\"]*)\\1\\s*$", Pattern.CASE_INSENSITIVE);
-    /** content disposition 2 */
+    /**
+     * content disposition 2
+     */
     private static final Pattern CONTENT_DISPOSITION_PATTERN_2 = Pattern.compile(
             "inline;\\s*filename\\s*=\\s*(\"?)([^\"]*)\\1\\s*$", Pattern.CASE_INSENSITIVE);
 
     public static final String HIDDEN_PREFIX = ".";
 
-    private FileUtil() {} //private constructor to enforce Singleton pattern
+    private FileUtil() {
+    } //private constructor to enforce Singleton pattern
 
 
     public static String getFilePathFromUri(Context context, Uri uri, String selection, String[] selectionArgs) {
@@ -107,7 +115,6 @@ public class FileUtil {
     }
 
 
-
     private static void closeStream(Closeable stream) {
         if (stream != null) {
             try {
@@ -119,7 +126,9 @@ public class FileUtil {
     }
 
 
-    /** loadFromAssets
+    /**
+     * loadFromAssets
+     *
      * @param context
      * @param fileName
      * @return
@@ -149,6 +158,62 @@ public class FileUtil {
     }
 
     /**
+     * 从assets中读取所有字符串
+     *
+     * @param filePath
+     * @return
+     */
+    public static String readFromAssets(Context context, String filePath) {
+        StringBuilder builder = new StringBuilder();
+        InputStreamReader read = null;
+        try {
+            read = new InputStreamReader(
+                    context.getAssets().open(filePath));
+            BufferedReader bufferedReader = new BufferedReader(read);
+            String lineTxt = null;
+            while ((lineTxt = bufferedReader.readLine()) != null) {
+                builder.append(lineTxt);
+            }
+        } catch (Exception e) {
+            Logger.e(FileUtil.class.getSimpleName(), "读取文件内容出错");
+            e.printStackTrace();
+        } finally {
+            if (read != null) {
+                try {
+                    read.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * 读取assets下json文件
+     *
+     * @param context
+     * @param fileName
+     * @return
+     */
+    public static String getJson(Context context, String fileName) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            AssetManager assetManager = context.getAssets();
+            BufferedReader bf = new BufferedReader(new InputStreamReader(
+                    assetManager.open(fileName + ".json"), "UTF-8"));
+            String line;
+            while ((line = bf.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
      * 删除文件
      *
      * @param filePath
@@ -172,11 +237,9 @@ public class FileUtil {
     }
 
     @NonNull
-    public static File getUirFile(Uri fileUri){
+    public static File getUirFile(Uri fileUri) {
         return new File(fileUri.getPath());
     }
-
-
 
 
     /**
@@ -184,7 +247,7 @@ public class FileUtil {
      *
      * @param uri
      * @return Extension including the dot("."); "" if there is no extension;
-     *         null if uri was null.
+     * null if uri was null.
      */
     public static String getExtension(String uri) {
         if (uri == null) {
@@ -327,9 +390,9 @@ public class FileUtil {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
@@ -369,10 +432,10 @@ public class FileUtil {
      * represents a local file.
      *
      * @param context The context.
-     * @param uri The Uri to query.
+     * @param uri     The Uri to query.
+     * @author paulburke
      * @see #isLocal(String)
      * @see #getFile(Context, Uri)
-     * @author paulburke
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getPath(final Context context, final Uri uri) {
@@ -434,7 +497,7 @@ public class FileUtil {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -462,9 +525,9 @@ public class FileUtil {
      * Convert Uri into File, if possible.
      *
      * @return file A local file that the Uri was pointing to, or null if the
-     *         Uri is unsupported or pointed to a remote resource.
-     * @see #getPath(Context, Uri)
+     * Uri is unsupported or pointed to a remote resource.
      * @author paulburke
+     * @see #getPath(Context, Uri)
      */
     public static File getFile(Context context, Uri uri) {
         if (uri != null) {
@@ -569,8 +632,7 @@ public class FileUtil {
                                 id,
                                 MediaStore.Video.Thumbnails.MINI_KIND,
                                 null);
-                    }
-                    else if (mimeType.contains(FileUtil.MIME_TYPE_IMAGE)) {
+                    } else if (mimeType.contains(FileUtil.MIME_TYPE_IMAGE)) {
                         bm = MediaStore.Images.Thumbnails.getThumbnail(
                                 resolver,
                                 id,

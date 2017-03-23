@@ -228,21 +228,29 @@ public class BrowserActivity extends BaseActivity implements IWebPageView, Downl
         // 如要点击一张图片在弹出的页面查看所有的图片集合,则获取的值应该是个图片数组
         webView.loadUrl("javascript:(function(){" +
                 "var objs = document.getElementsByTagName(\"img\");" +
+                "var array=new Array();" +
                 "for(var i=0;i<objs.length;i++)" +
                 "{" +
-                //  "objs[i].onclick=function(){alert(this.getAttribute(\"has_link\"));}" +
-                "objs[i].onclick=function(){window.injectedObject.imageClick(this.getAttribute(\"src\"),this.getAttribute(\"has_link\"));}" +
-//                "objs[i].onclick=function(){window.injectedObject.imageClick(this.getAttribute(\"src\"),i);}" +
+//                       "array[i]=objs[i].getAttribute(\\\"src\\\");"+
+//                       "objs[i].onclick=function(){window." + mInjectedName + ".imageClick(array.toString(),i);}" + //获取全部图片
+                "objs[i].onclick=function(){window." + mInjectedName + ".imageClick(this.getAttribute(\"src\"));}" +    //点击获取单张图片
+//                     "objs[i].onclick=function(){alert(this.getAttribute(\"has_link\"));}" +
+                //                 "objs[i].onclick=function(){window." + mInjectedName + ".imageClick(this.getAttribute(\"src\"),this.getAttribute(\"has_link\"));}" +
                 "}" +
                 "})()");
 
-        // 遍历所有的a节点,将节点里的属性传递过去(属性自定义,用于页面跳转)
+//        webView.loadUrl("javascript:(function(){ " + "var objs = document.getElementsByTagName(\"img\");"
+//                + " var array=new Array(); " + " for(var j=0;j<objs.length;j++){ " + "array[j]=objs[j].src;" + " }  "
+//                + "for(var i=0;i<objs.length;i++){"
+//                + "objs[i].onclick=function(){  window.imageClick.imageClick(array.toString(),i);" + "}  " + "}    })()");
+
+//         遍历所有的a节点,将节点里的属性传递过去(属性自定义,用于页面跳转)
         webView.loadUrl("javascript:(function(){" +
                 "var objs =document.getElementsByTagName(\"a\");" +
                 "for(var i=0;i<objs.length;i++)" +
                 "{" +
                 "objs[i].onclick=function(){" +
-                "window.injectedObject.textClick(this.getAttribute(\"type\"),this.getAttribute(\"item_pk\"));}" +
+                "window." + mInjectedName + ".textClick(this.getAttribute(\"type\"),this.getAttribute(\"item_pk\"));}" +
                 "}" +
                 "})()");
     }

@@ -2,7 +2,7 @@ package com.mvvm.lux.framework.manager.hybrid;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -14,16 +14,20 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.imagepipeline.image.ImageInfo;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.mvvm.lux.framework.R;
 import com.mvvm.lux.framework.base.BaseActivity;
+import com.mvvm.lux.widget.utils.DisplayUtil;
 
 import java.util.ArrayList;
 
 import me.relex.photodraweeview.OnPhotoTapListener;
+import me.relex.photodraweeview.OnViewTapListener;
 import me.relex.photodraweeview.PhotoDraweeView;
+import progress.CircleProgress;
+import progress.enums.CircleStyle;
 
 /**
  * 相册方式浏览图片
@@ -52,22 +56,23 @@ public class ImagePicsListActivity extends BaseActivity {
         // 没有任何url时，直接return跳走，UI交互上是用户根本进不来
         Intent intent = getIntent();
         mUrls = intent.getStringArrayListExtra(KEY_INTENT_DATA_URL);
+        mPosition = intent.getIntExtra(KEY_INTENT_DATA_POS, 0);
         if (!checkIllegal()) {
             finish();
             return;
         }
         urlistsize = mUrls.size();
-        mPosition = intent.getIntExtra(KEY_INTENT_DATA_POS, 0);
-        refreshCurrentPosition(mPosition);
+        initViews();
     }
 
-    protected void initView() {
+    private void initViews() {
         madvertv = (TextView) findViewById(R.id.advert_tv);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(new MyPagerAdapter(this, mUrls));
         mViewPager.setOnPageChangeListener(mOnPageChangeListener);
         mViewPager.setCurrentItem(mPosition);
         mViewPager.setOffscreenPageLimit(3);
+        refreshCurrentPosition(mPosition);
     }
 
     private boolean checkIllegal() {
@@ -96,7 +101,7 @@ public class ImagePicsListActivity extends BaseActivity {
         }
     };
 
-    class MyPagerAdapter extends PagerAdapter {
+    private class MyPagerAdapter extends PagerAdapter {
         private Context mContext = null;
         private ArrayList<String> mUrls;
 
@@ -111,26 +116,29 @@ public class ImagePicsListActivity extends BaseActivity {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+            String url = mUrls.get(position);
             View contentview = LayoutInflater.from(mContext).inflate(R.layout.gallery_item, container, false);
-            final PhotoDraweeView photoView = (PhotoDraweeView) contentview
-                    .findViewById(R.id.photoview);
-            String imageURL = mUrls.get(position);
-            photoView.setOnPhotoTapListener(onPhotoTapListener);
+            PhotoDraweeView photoView = (PhotoDraweeView) contentview.findViewById(R.id.photoview);
+            photoView.setOnViewTapListener(mOnPhotoTapListener);
 
-            PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
-            controller.setUri(imageURL);
-            controller.setOldController(photoView.getController());
-            controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
-                @Override
-                public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
-                    super.onFinalImageSet(id, imageInfo, animatable);
-                    if (imageInfo == null) {
-                        return;
-                    }
-                    photoView.update(imageInfo.getWidth(), imageInfo.getHeight());
-                }
-            });
-            photoView.setController(controller.build());
+            new CircleProgress  //加载圆形进度条
+                    .Builder()
+                    .setStyle(CircleStyle.FAN)
+                    .setProgressColor(mContext.getResources().getColor(R.color.white_trans))
+                    .setCustomText((position + 1) + "")
+                    .setTextSize(DisplayUtil.dp2px(mContext,14))
+                    .setCircleRadius(DisplayUtil.dp2px(mContext,20))
+                    .build()
+                    .injectFresco(photoView);
+
+            ImageRequest request = ImageRequestBuilder
+                    .newBuilderWithSource(Uri.parse(url))
+                    .setResizeOptions(new ResizeOptions(DisplayUtil.getScreenWidth(mContext),DisplayUtil.getScreenHeight(mContext)))
+                    .build();
+
+            photoView.setController(Fresco.newDraweeControllerBuilder()
+                    .setImageRequest(request).build());
+            photoView.setPhotoUri(Uri.parse(url));
             container.addView(contentview);
             return contentview;
         }
@@ -148,6 +156,20 @@ public class ImagePicsListActivity extends BaseActivity {
     private OnPhotoTapListener onPhotoTapListener = new OnPhotoTapListener() {
         @Override
         public void onPhotoTap(View view, float x, float y) {
+            if (view instanceof PhotoDraweeView) {
+                PhotoDraweeView photoView = (PhotoDraweeView) view;
+                if (photoView.getScale() > photoView.getMinimumScale()) {
+                    photoView.setScale(photoView.getMinimumScale(), true);
+                } else {
+                    finish();
+                }
+            }
+        }
+    };
+
+    private OnViewTapListener mOnPhotoTapListener = new OnViewTapListener() {
+        @Override
+        public void onViewTap(View view, float x, float y) {
             if (view instanceof PhotoDraweeView) {
                 PhotoDraweeView photoView = (PhotoDraweeView) view;
                 if (photoView.getScale() > photoView.getMinimumScale()) {

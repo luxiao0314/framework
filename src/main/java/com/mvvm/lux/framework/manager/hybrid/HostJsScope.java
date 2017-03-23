@@ -202,7 +202,36 @@ public class HostJsScope {
     }
 
     public static void imageClick(WebView view, String imgUrl, String position) {
+        ArrayList<String> urls = new ArrayList<>();
+        urls.add(imgUrl);
         ImagePicsListActivity.entryGallery(view.getContext(), null, Integer.parseInt(position));
+    }
+
+    /**
+     * 传递的图片集合
+     * @param view
+     * @param imgUrl
+     * @param position
+     */
+    public static void imageClick(WebView view, String imgUrl, int position) {
+        ArrayList<String> urls = new ArrayList<>();
+        String[] split = imgUrl.split(",");
+        for (String s : split) {
+            urls.add(s);
+        }
+        ImagePicsListActivity.entryGallery(view.getContext(), urls, position);
+    }
+
+    /**
+     * 传递单张图片
+     * @param view
+     * @param imgUrl
+     */
+    public static void imageClick(WebView view, String imgUrl) {
+        if (!imgUrl.contains("http")) return;
+        ArrayList<String> urls = new ArrayList<>();
+        urls.add(imgUrl);
+        ImagePicsListActivity.entryGallery(view.getContext(), urls, 0);
     }
 
     /* ----------------------   可以实现交互了,必须多一个webView参数,必须是用public static   ------------------------- */

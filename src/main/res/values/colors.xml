@@ -113,4 +113,6 @@
 
     <!--水波纹或5.0以下选择器颜色-->
     <color name="tabBackground">#777D7D7D</color>
+
+    <color name="white_trans">#33FFFFFF</color>
 </resources>
