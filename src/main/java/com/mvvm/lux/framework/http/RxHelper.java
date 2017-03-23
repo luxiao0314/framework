@@ -39,44 +39,20 @@ public class RxHelper {
     }
 
     /**
-     * 使用假数据
-     *
-     * @param virtualData
+     * 使用假数据,读取的是assets中的json数据
+     * @param clazz
      * @param <T>
      * @return
      */
-    public static <T> Observable.Transformer<BaseResponse<T>, T> handleVirtualData(final String virtualData) {
-        return new Observable.Transformer<BaseResponse<T>, T>() {
-            @Override
-            public Observable<T> call(Observable<BaseResponse<T>> observable) {
-                return (Observable<T>) observable.flatMap(new Func1<BaseResponse<T>, Observable<T>>() {
-                    @Override
-                    public Observable<T> call(BaseResponse<T> tBaseResponse) {
-                        String filepath = "virtualdata" + "/" + virtualData;
-                        String response = FileUtil.getJson(BaseApplication.getAppContext(), filepath);
-                        Gson gson = new Gson();
-                        T data = (T) gson.fromJson(response, tBaseResponse.getData().getClass());
-                        return HandleResultFuc.createData(data);
-                    }
-                }).compose(io_main());
-            }
-        };
-    }
-
-    public static <T> Observable.Transformer<T, T> handleVirtualDatas() {
+    public static <T> Observable.Transformer<T, T> handleVirtualData(final Class<T> clazz) {
         return new Observable.Transformer<T, T>() {
             @Override
             public Observable<T> call(Observable<T> observable) {
-                return (Observable<T>) observable.flatMap(new Func1<T, Observable<T>>() {
-                    @Override
-                    public Observable<T> call(T tBaseResponse) {
-                        String filepath = "virtualdata" + "/" + tBaseResponse.getClass().getSimpleName();
-                        String response = FileUtil.getJson(BaseApplication.getAppContext(), filepath);
-                        Gson gson = new Gson();
-                        T data = (T) gson.fromJson(response, tBaseResponse.getClass());
-                        return HandleResultFuc.createData(data);
-                    }
-                }).compose(io_main());
+                String filepath = "virtualdata" + "/" + clazz.getSimpleName();
+                String response = FileUtil.getJson(BaseApplication.getAppContext(), filepath);
+                Gson gson = new Gson();
+                T data = gson.fromJson(response, clazz);
+                return HandleResultFuc.createData(data);
             }
         };
     }
