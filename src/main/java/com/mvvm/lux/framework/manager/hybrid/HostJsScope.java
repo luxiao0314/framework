@@ -204,7 +204,7 @@ public class HostJsScope {
     public static void imageClick(WebView view, String imgUrl, String position) {
         ArrayList<String> urls = new ArrayList<>();
         urls.add(imgUrl);
-        ImagePicsListActivity.entryGallery(view.getContext(), null, Integer.parseInt(position));
+        ImagePicsListActivity.entryGallery(view.getContext(), urls, Integer.parseInt(position));
     }
 
     /**

@@ -35,6 +35,7 @@ public class MyWebViewClient extends WebViewClient {
     @SuppressWarnings("deprecation")
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
         // 优酷视频跳转浏览器播放
         if (url.startsWith("http://v.youku.com/")) {
             Intent intent = new Intent();
@@ -61,8 +62,12 @@ public class MyWebViewClient extends WebViewClient {
             return true;
         }
         if (url.contains("dmzjandroid:")) {
-            url = url.replace("dmzjandroid:","");
+            url = url.replace("dmzjandroid:", "");
         }
+//        if (url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".JPG") || url.endsWith(".JPEG") || url.endsWith(".PNG")) {
+//            ImagePicsListActivity.entryGallery(view.getContext(), url, 0);
+//            return true;
+//        }
         view.loadUrl(url);
         return false;
     }

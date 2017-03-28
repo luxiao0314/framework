@@ -151,6 +151,8 @@ public class Session {
         public String pinganfuToken;
         public String secondToken;
         public String suumUserId;
+        public String email;
+        public String password;
 
         User() {
         }

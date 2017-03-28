@@ -3,6 +3,7 @@ package com.mvvm.lux.framework.http.exception;
 import android.net.ParseException;
 
 import com.google.gson.JsonParseException;
+import com.mvvm.lux.framework.config.FrameWorkConfig;
 import com.mvvm.lux.framework.utils.Logger;
 
 import org.apache.http.conn.ConnectTimeoutException;
@@ -37,9 +38,11 @@ public class RetrofitException {
             switch (httpException.code()) {
                 case UNAUTHORIZED:  //一般是token过期,在这里处理可以,抛一个token过期的异常也可以,retry可以解决
                     ex.setMessage("token过期");
+                    FrameWorkConfig.frameworkSupport.onSessionInvaild();
                     break;
                 case FORBIDDEN:
                     ex.setMessage("请求是被禁止的");
+                    break;
                 case NOT_FOUND:
                     ex.setMessage("HTTP NOT FOUND");
                     break;

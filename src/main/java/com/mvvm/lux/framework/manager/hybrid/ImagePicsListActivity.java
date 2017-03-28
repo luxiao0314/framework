@@ -41,10 +41,33 @@ public class ImagePicsListActivity extends BaseActivity {
     public static final String KEY_INTENT_DATA_URL = "keyImgurls";
     public static final String KEY_INTENT_DATA_POS = "keyImgposi";
 
-    public static void entryGallery(Context context, ArrayList<String> urls, int positition) {
+    /**
+     * 显示图片列表
+     *
+     * @param context
+     * @param urls
+     * @param position
+     */
+    public static void entryGallery(Context context, ArrayList<String> urls, int position) {
         Intent intent = new Intent(context, ImagePicsListActivity.class);
         intent.putStringArrayListExtra(KEY_INTENT_DATA_URL, urls);
-        intent.putExtra(KEY_INTENT_DATA_POS, positition);
+        intent.putExtra(KEY_INTENT_DATA_POS, position);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 显示当前图片
+     *
+     * @param context
+     * @param url
+     * @param position
+     */
+    public static void entryGallery(Context context, String url, int position) {
+        ArrayList<String> urls = new ArrayList<>();
+        urls.add(url);
+        Intent intent = new Intent(context, ImagePicsListActivity.class);
+        intent.putStringArrayListExtra(KEY_INTENT_DATA_URL, urls);
+        intent.putExtra(KEY_INTENT_DATA_POS, position);
         context.startActivity(intent);
     }
 
@@ -126,14 +149,14 @@ public class ImagePicsListActivity extends BaseActivity {
                     .setStyle(CircleStyle.FAN)
                     .setProgressColor(mContext.getResources().getColor(R.color.white_trans))
                     .setCustomText((position + 1) + "")
-                    .setTextSize(DisplayUtil.dp2px(mContext,14))
-                    .setCircleRadius(DisplayUtil.dp2px(mContext,20))
+                    .setTextSize(DisplayUtil.dp2px(mContext, 14))
+                    .setCircleRadius(DisplayUtil.dp2px(mContext, 20))
                     .build()
                     .injectFresco(photoView);
 
             ImageRequest request = ImageRequestBuilder
                     .newBuilderWithSource(Uri.parse(url))
-                    .setResizeOptions(new ResizeOptions(DisplayUtil.getScreenWidth(mContext),DisplayUtil.getScreenHeight(mContext)))
+                    .setResizeOptions(new ResizeOptions(DisplayUtil.getScreenWidth(mContext), DisplayUtil.getScreenHeight(mContext)))
                     .build();
 
             photoView.setController(Fresco.newDraweeControllerBuilder()

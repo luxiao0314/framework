@@ -125,7 +125,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         boolean logHeaders = (printLevel == Level.BODY || printLevel == Level.HEADERS);
 
         try {
-            log("<=================================== " + clone.code() + ' ' + clone.message() + ' ' + "\n" + clone.request().url() + " (" + tookMs + "ms）" + "\n");
+            log("<=================================== " + clone.code() + ' ' + clone.message() + ' ' + "\n" + clone.request().url() + " (" + tookMs + "ms）" + "\n");    //URL
             if (logHeaders) {
                 Headers headers = clone.headers();
                 for (int i = 0, count = headers.size(); i < count; i++) {

@@ -1,6 +1,7 @@
 package com.mvvm.lux.framework.http.converter;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 
@@ -12,6 +13,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
+/**
+ * 本来是想将[]数组格式的json用Gson进行转换了数组,结果是多余的,备以后用
+ */
 public class MyGsonConverterFactory extends Converter.Factory {
     private final Gson gson;
 
@@ -21,7 +25,12 @@ public class MyGsonConverterFactory extends Converter.Factory {
     }
 
     public static MyGsonConverterFactory create() {
-        return create(new Gson());
+        return create(
+                new GsonBuilder()
+                        .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                        .serializeNulls()
+                        .create()
+        );
     }
 
     public static MyGsonConverterFactory create(Gson gson) {
