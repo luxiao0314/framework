@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import com.mvvm.lux.framework.BaseApplication;
 import com.mvvm.lux.framework.config.MarkAble;
+import com.mvvm.lux.framework.http.RetrofitExcuter;
 import com.mvvm.lux.framework.manager.router.Router;
 import com.mvvm.lux.framework.utils.Logger;
 
@@ -77,6 +78,7 @@ public abstract class BaseActivity<T extends BaseViewModel> extends SupportActiv
             Realm.getDefaultInstance().close();
         }
         BaseApplication.getAppContext().unregisterActivity(this);
+        RetrofitExcuter.getOkHttpClient().dispatcher().cancelAll();
     }
 
     @Override

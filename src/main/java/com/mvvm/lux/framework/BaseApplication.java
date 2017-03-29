@@ -7,6 +7,7 @@ import android.os.Process;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mvvm.lux.framework.http.RetrofitExcuter;
 import com.mvvm.lux.framework.http.fresco.ImageLoaderConfig;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.LinkedList;
 
@@ -46,6 +47,8 @@ public class BaseApplication extends Application {
                Fresco.initialize(getAppContext(), ImageLoaderConfig.getImagePipelineConfig(getAppContext()));
                //初始化realm
                initRealm();
+               //初始化缓存
+               Hawk.init(sInstance).build();
 
                //蒲公英crash上报
                //PgyCrashManager.register(this);

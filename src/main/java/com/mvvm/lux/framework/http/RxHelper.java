@@ -3,6 +3,7 @@ package com.mvvm.lux.framework.http;
 
 import com.google.gson.Gson;
 import com.mvvm.lux.framework.BaseApplication;
+import com.mvvm.lux.framework.config.RxCache;
 import com.mvvm.lux.framework.http.base.BaseResponse;
 import com.mvvm.lux.framework.http.exception.RetrofitException;
 import com.mvvm.lux.framework.http.exception.RetryWhenNetworkException;
@@ -29,10 +30,12 @@ public class RxHelper {
         return new Observable.Transformer<BaseResponse<T>, T>() {
             @Override
             public Observable<T> call(Observable<BaseResponse<T>> observable) {
-                return observable.flatMap(new <T>HandleResultFuc())    //将RxSubscriber中服务器异常处理换到这里,在RxSubscriber中处理onstart(),onCompleted().onError,onNext()
+                return observable
+                        .compose(cache())   //设置缓存
+                        .flatMap(new <T>HandleResultFuc())    //将RxSubscriber中服务器异常处理换到这里,在RxSubscriber中处理onstart(),onCompleted().onError,onNext()
                         .compose(io_main()) //处理线程切换,注销Observable
-                        .onErrorResumeNext(new HttpResponseFunc<T>())//判断异常
-                        .retryWhen(new RetryWhenNetworkException());
+                        .onErrorResumeNext(httpResponseFunc())//判断异常
+                        .retryWhen(new RetryWhenNetworkException(3, 2 * 1000)); //重试次数,重试间隔
 //                        .retryWhen(new TimeOutRetry())  //token过期的重试,有问题
             }
         };
@@ -40,6 +43,7 @@ public class RxHelper {
 
     /**
      * 使用假数据,读取的是assets中的json数据
+     *
      * @param clazz
      * @param <T>
      * @return
@@ -69,7 +73,8 @@ public class RxHelper {
             public Observable<T> call(Observable<T> observable) {
                 return (Observable<T>) observable
                         .compose(io_main()) //处理线程切换,注销Observable
-                        .onErrorResumeNext(new HttpResponseFunc<T>());//判断异常
+                        .compose(cache())   //设置缓存
+                        .onErrorResumeNext(httpResponseFunc());//判断异常
             }
         };
     }
@@ -79,11 +84,28 @@ public class RxHelper {
      *
      * @param <T>
      */
-    private static class HttpResponseFunc<T> implements Func1<Throwable, Observable<T>> {
-        @Override
-        public Observable<T> call(Throwable t) {
-            return Observable.error(RetrofitException.handleException(t));
-        }
+    private static <T> Func1<Throwable, Observable<T>> httpResponseFunc() {
+        return new Func1<Throwable, Observable<T>>() {
+            @Override
+            public Observable<T> call(Throwable throwable) {
+                return Observable.error(RetrofitException.handleException(throwable));
+            }
+        };
+    }
+
+    /**
+     * 截取发射的数据去做缓存
+     *
+     * @param <T>
+     * @return
+     */
+    private static <T> Observable.Transformer<T, T> cache() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> tObservable) {
+                return RxCache.load(tObservable, true);
+            }
+        };
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.mvvm.lux.framework.http.interceptor;
 
+import com.mvvm.lux.framework.config.PassUrlEvent;
+import com.mvvm.lux.framework.rx.RxBus;
 import com.mvvm.lux.framework.utils.Logger;
 
 import java.io.IOException;
@@ -126,6 +128,7 @@ public class HttpLoggingInterceptor implements Interceptor {
 
         try {
             log("<=================================== " + clone.code() + ' ' + clone.message() + ' ' + "\n" + clone.request().url() + " (" + tookMs + "ms）" + "\n");    //URL
+            RxBus.init().postSticky(new PassUrlEvent(String.valueOf(clone.request().url())));
             if (logHeaders) {
                 Headers headers = clone.headers();
                 for (int i = 0, count = headers.size(); i < count; i++) {

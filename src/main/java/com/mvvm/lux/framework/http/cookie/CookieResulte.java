@@ -49,7 +49,7 @@ public class CookieResulte {
     public void setUrl(String url) {
         this.url = url;
     }
-    public String getResulte() {
+    public String getResult() {
         return this.resulte;
     }
     public void setResulte(String resulte) {
@@ -60,5 +60,10 @@ public class CookieResulte {
     }
     public void setTime(long time) {
         this.time = time;
+    }
+
+
+    public String getResulte() {
+        return this.resulte;
     }
 }

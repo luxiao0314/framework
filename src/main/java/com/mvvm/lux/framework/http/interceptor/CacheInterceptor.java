@@ -94,7 +94,7 @@ public class CacheInterceptor implements Interceptor {
                 return response.newBuilder()
                         .removeHeader("Pragma")
                         .removeHeader("Cache-Control")
-                        .header("Cache-Control", "public, max-age=" + maxAge)
+                        .header("Cache-Control", "public, only-if-cached, max-age=" + maxAge)
                         .build();
             }
         } else {//无网络

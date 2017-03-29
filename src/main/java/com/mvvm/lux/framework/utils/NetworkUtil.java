@@ -36,8 +36,6 @@ public class NetworkUtil {
     /** wifi网络 */
     public static final String NETWORKTYPE_WIFI = "WIFI";
 
-    private static String mNetWorkType;
-
 
     /**
      * check NetworkAvailable

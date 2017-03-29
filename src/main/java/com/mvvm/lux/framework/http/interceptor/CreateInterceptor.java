@@ -1,11 +1,14 @@
 package com.mvvm.lux.framework.http.interceptor;
 
 
+import android.support.annotation.NonNull;
+
 import com.mvvm.lux.framework.http.exception.ServerException;
 import com.mvvm.lux.framework.utils.Logger;
 
 import java.io.IOException;
 
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 
@@ -14,8 +17,14 @@ public class CreateInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+        return response(chain);
+    }
+
+    @NonNull
+    private Response response(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());  //如果401了，会先执行TokenAuthenticator
-        Logger.e("CreateInterceptor request url " + response.request().url());
+        HttpUrl url = response.request().url();
+        Logger.e("CreateInterceptor request url " + url);
         Logger.e("CreateInterceptor  response code " + response.code());
         switch (response.code()) {
             case HTTP_CODE_ACCEPT:

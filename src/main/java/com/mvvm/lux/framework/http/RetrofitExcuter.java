@@ -34,7 +34,7 @@ public class RetrofitExcuter {
                 .readTimeout(20, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true) //重试机制
                 .addLog(true) //用于输出网络请求和结果log的拦截器
-                .addCache(true)
+//                .addCache(true)
                 .addSSLSocketFactory(CusSSLSocketFactory.getUnsafeOkHttpClient())  //不安全证书
                 .addHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER) //信任所有证书
                 .build();

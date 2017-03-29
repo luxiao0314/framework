@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mvvm.lux.framework.config.MarkAble;
+import com.mvvm.lux.framework.http.RetrofitExcuter;
 import com.mvvm.lux.framework.utils.Logger;
 
 import me.yokeyword.fragmentation.SupportFragment;
@@ -116,6 +117,7 @@ public abstract class MvvmFragment<T extends BaseViewModel> extends SupportFragm
     public void onDestroy() {
         super.onDestroy();
         Logger.d(this.getClass().getName(), getName() + "------>onDestroy");
+        RetrofitExcuter.getOkHttpClient().dispatcher().cancelAll();
     }
 
     @Override
