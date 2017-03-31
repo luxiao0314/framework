@@ -3,6 +3,7 @@ package com.mvvm.lux.framework.http;
 
 import com.google.gson.Gson;
 import com.mvvm.lux.framework.BaseApplication;
+import com.mvvm.lux.framework.config.FrameWorkConfig;
 import com.mvvm.lux.framework.config.RxCache;
 import com.mvvm.lux.framework.http.base.BaseResponse;
 import com.mvvm.lux.framework.http.exception.RetrofitException;
@@ -35,8 +36,8 @@ public class RxHelper {
                         .flatMap(new <T>HandleResultFuc())    //将RxSubscriber中服务器异常处理换到这里,在RxSubscriber中处理onstart(),onCompleted().onError,onNext()
                         .compose(io_main()) //处理线程切换,注销Observable
                         .onErrorResumeNext(httpResponseFunc())//判断异常
-                        .retryWhen(new RetryFuc(3, 2 * 1000)); //重试次数,重试间隔
-//                        .retryWhen(new TimeOutRetry())  //token过期的重试,有问题
+                        .retryWhen(new RetryFuc(3, 2 * 1000)) //重试次数,重试间隔
+                        .retryWhen(new TimeOutRetry());  //token过期的重试,有问题
             }
         };
     }
@@ -126,7 +127,7 @@ public class RxHelper {
         };
     }
 
-        /**
+    /**
      * token过期,登录超时的重新连接
      */
     public static class TimeOutRetry implements Func1<Observable<? extends Throwable>, Observable> {
@@ -137,17 +138,8 @@ public class RxHelper {
                 @Override
                 public Observable<?> call(Throwable throwable) {
                     if (throwable instanceof TimeoutException) {
-//                        return RetrofitExcuter.create()
-//                                .client(RetrofitExcuter.getOkHttpClient())
-//                                .baseUrl("")
-//                                .build();
-//                                .getLiveIndex()
-//                                .doOnSubscribe(new Action0() {
-//                                    @Override
-//                                    public void call() {
-//
-//                                    }
-//                                });
+                        //登录超时,重新登录
+                        FrameWorkConfig.frameworkSupport.onSessionInvaild();
                     }
                     return Observable.error(throwable);
                 }
