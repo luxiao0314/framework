@@ -6,8 +6,9 @@ import com.mvvm.lux.framework.BaseApplication;
 import com.mvvm.lux.framework.config.RxCache;
 import com.mvvm.lux.framework.http.base.BaseResponse;
 import com.mvvm.lux.framework.http.exception.RetrofitException;
-import com.mvvm.lux.framework.http.exception.RetryWhenNetworkException;
 import com.mvvm.lux.framework.utils.FileUtil;
+
+import java.util.concurrent.TimeoutException;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -31,11 +32,10 @@ public class RxHelper {
             @Override
             public Observable<T> call(Observable<BaseResponse<T>> observable) {
                 return observable
-                        .compose(cache())   //设置缓存
                         .flatMap(new <T>HandleResultFuc())    //将RxSubscriber中服务器异常处理换到这里,在RxSubscriber中处理onstart(),onCompleted().onError,onNext()
                         .compose(io_main()) //处理线程切换,注销Observable
                         .onErrorResumeNext(httpResponseFunc())//判断异常
-                        .retryWhen(new RetryWhenNetworkException(3, 2 * 1000)); //重试次数,重试间隔
+                        .retryWhen(new RetryFuc(3, 2 * 1000)); //重试次数,重试间隔
 //                        .retryWhen(new TimeOutRetry())  //token过期的重试,有问题
             }
         };
@@ -73,7 +73,6 @@ public class RxHelper {
             public Observable<T> call(Observable<T> observable) {
                 return (Observable<T>) observable
                         .compose(io_main()) //处理线程切换,注销Observable
-                        .compose(cache())   //设置缓存
                         .onErrorResumeNext(httpResponseFunc());//判断异常
             }
         };
@@ -95,15 +94,16 @@ public class RxHelper {
 
     /**
      * 截取发射的数据去做缓存
+     * 如果直接使用Transformer变压器,rxCache.load()方法会优先拦截器执行
      *
      * @param <T>
      * @return
      */
-    private static <T> Observable.Transformer<T, T> cache() {
+    public static <T> Observable.Transformer<T, T> cache(final String cacheKey) {
         return new Observable.Transformer<T, T>() {
             @Override
-            public Observable<T> call(Observable<T> tObservable) {
-                return RxCache.load(tObservable, true);
+            public Observable<T> call(final Observable<T> tObservable) {
+                return RxCache.load(tObservable, true, cacheKey);
             }
         };
     }
@@ -126,18 +126,21 @@ public class RxHelper {
         };
     }
 
-    //    /**
-//     * token过期,登录超时的重新连接
-//     */
-//    public static class TimeOutRetry implements Func1<Observable<? extends Throwable>, Observable> {
-//
-//        @Override
-//        public Observable call(Observable<? extends Throwable> observable) {
-//            return observable.flatMap(new Func1<Throwable, Observable<?>>() {
-//                @Override
-//                public Observable<?> call(Throwable throwable) {
-//                    if (throwable instanceof TimeoutException) {
-//                        return RetrofitExcuter.init("")
+        /**
+     * token过期,登录超时的重新连接
+     */
+    public static class TimeOutRetry implements Func1<Observable<? extends Throwable>, Observable> {
+
+        @Override
+        public Observable call(Observable<? extends Throwable> observable) {
+            return observable.flatMap(new Func1<Throwable, Observable<?>>() {
+                @Override
+                public Observable<?> call(Throwable throwable) {
+                    if (throwable instanceof TimeoutException) {
+//                        return RetrofitExcuter.create()
+//                                .client(RetrofitExcuter.getOkHttpClient())
+//                                .baseUrl("")
+//                                .build();
 //                                .getLiveIndex()
 //                                .doOnSubscribe(new Action0() {
 //                                    @Override
@@ -145,11 +148,11 @@ public class RxHelper {
 //
 //                                    }
 //                                });
-//                    }
-//                    return Observable.error(throwable);
-//                }
-//            });
-//        }
-//    }
+                    }
+                    return Observable.error(throwable);
+                }
+            });
+        }
+    }
 
 }

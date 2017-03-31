@@ -17,8 +17,8 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class AESOperator {
 
-    /*  
-     * 加密用的Key 可以用26个字母和数字组成 此处使用AES-128-CBC加密模式，key需要为16位。  
+    /*
+     * 加密用的Key 可以用26个字母和数字组成 此处使用AES-128-CBC加密模式，key需要为16位。
      */
     private String ivParameter = "9238513401340235";
     private static AESOperator instance;
@@ -131,12 +131,12 @@ public class AESOperator {
         return strBuf.toString();
     }
 
-    public static String encryptSHA256(String strSrc, String encName) {
+    public static String encryptSHA256(String strSrc) {
         MessageDigest md = null;
         String strDes = null;
         byte[] bt = strSrc.getBytes();
         try {
-            md = MessageDigest.getInstance(encName);
+            md = MessageDigest.getInstance("SHA-256");
             md.update(bt);
             strDes = StringUtil.bytes2Hex(md.digest()); // to HexString
         } catch (NoSuchAlgorithmException e) {

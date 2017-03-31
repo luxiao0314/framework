@@ -12,7 +12,7 @@ import rx.Subscriber;
 import rx.functions.Func1;
 
 /**
- * @Description 处理返回结果, 成功直接返回, 失败抛异常.网络连接是通的, 能拿到结果
+ * @Description 处理返回结果, 成功直接返回, 失败抛异常.
  * @Author luxiao418
  * @Email luxiao418@pingan.com.cn
  * @Date 2016/12/14 18:58

@@ -3,13 +3,14 @@ package com.mvvm.lux.framework.http.interceptor;
 
 import android.support.annotation.NonNull;
 
+import com.mvvm.lux.framework.config.PassUrlEvent;
 import com.mvvm.lux.framework.http.exception.ServerException;
-import com.mvvm.lux.framework.utils.Logger;
+import com.mvvm.lux.framework.rx.RxBus;
 
 import java.io.IOException;
 
-import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
+import okhttp3.Request;
 import okhttp3.Response;
 
 public class CreateInterceptor implements Interceptor {
@@ -22,10 +23,9 @@ public class CreateInterceptor implements Interceptor {
 
     @NonNull
     private Response response(Chain chain) throws IOException {
-        Response response = chain.proceed(chain.request());  //如果401了，会先执行TokenAuthenticator
-        HttpUrl url = response.request().url();
-        Logger.e("CreateInterceptor request url " + url);
-        Logger.e("CreateInterceptor  response code " + response.code());
+        Request request = chain.request();
+        RxBus.init().postSticky(new PassUrlEvent(String.valueOf(request.url())));
+        Response response = chain.proceed(request);  //如果401了，会先执行TokenAuthenticator
         switch (response.code()) {
             case HTTP_CODE_ACCEPT:
                 throw new ServerException(HTTP_CODE_ACCEPT, response.header("Retry-After"));

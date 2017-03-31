@@ -1,4 +1,6 @@
-package com.mvvm.lux.framework.http.exception;
+package com.mvvm.lux.framework.http;
+
+import com.mvvm.lux.framework.http.exception.Throwable;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -13,7 +15,7 @@ import rx.functions.Func2;
  * retry条件
  * Created by WZG on 2016/10/17.
  */
-public class RetryWhenNetworkException implements Func1<Observable<? extends Throwable>, Observable<?>> {
+public class RetryFuc implements Func1<Observable<? extends Throwable>, Observable<?>> {
     /* retry次数*/
     private int count = 3;
     /*延迟*/
@@ -21,16 +23,16 @@ public class RetryWhenNetworkException implements Func1<Observable<? extends Thr
     /*叠加延迟*/
     private long increaseDelay = 3000;
 
-    public RetryWhenNetworkException() {
+    public RetryFuc() {
 
     }
 
-    public RetryWhenNetworkException(int count, long delay) {
+    public RetryFuc(int count, long delay) {
         this.count = count;
         this.delay = delay;
     }
 
-    public RetryWhenNetworkException(int count, long delay, long increaseDelay) {
+    public RetryFuc(int count, long delay, long increaseDelay) {
         this.count = count;
         this.delay = delay;
         this.increaseDelay = increaseDelay;

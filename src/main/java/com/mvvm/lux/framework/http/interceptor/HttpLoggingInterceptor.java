@@ -1,7 +1,5 @@
 package com.mvvm.lux.framework.http.interceptor;
 
-import com.mvvm.lux.framework.config.PassUrlEvent;
-import com.mvvm.lux.framework.rx.RxBus;
 import com.mvvm.lux.framework.utils.Logger;
 
 import java.io.IOException;
@@ -64,6 +62,7 @@ public class HttpLoggingInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
+
         if (printLevel == Level.NONE) {
             return chain.proceed(request);
         }
@@ -94,7 +93,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         Protocol protocol = connection != null ? connection.protocol() : Protocol.HTTP_1_1;
 
         try {
-            String requestStartMessage = "=================> " + request.method() + "\n" + ' ' + request.url() + ' ' + protocol;
+            String requestStartMessage = "request =================> " + request.method() + "\n" + ' ' + request.url() + ' ' + protocol;
             log(requestStartMessage);
 
             if (logHeaders) {
@@ -115,7 +114,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         } catch (Exception e) {
             Logger.e(e);
         } finally {
-            log("=================> END " + request.method() + "\n");
+            log("request =================> END " + request.method() + "\n");
         }
     }
 
@@ -127,8 +126,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         boolean logHeaders = (printLevel == Level.BODY || printLevel == Level.HEADERS);
 
         try {
-            log("<=================================== " + clone.code() + ' ' + clone.message() + ' ' + "\n" + clone.request().url() + " (" + tookMs + "ms）" + "\n");    //URL
-            RxBus.init().postSticky(new PassUrlEvent(String.valueOf(clone.request().url())));
+            log("response <=================================== " + clone.code() + ' ' + clone.message() + ' ' + "\n" + clone.request().url() + " (" + tookMs + "ms）" + "\n");    //URL
             if (logHeaders) {
                 Headers headers = clone.headers();
                 for (int i = 0, count = headers.size(); i < count; i++) {
@@ -151,7 +149,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         } catch (Exception e) {
             Logger.e(e);
         } finally {
-            log("<=================================== END HTTP" + "\n\n");
+            log("response <=================================== END HTTP" + "\n\n");
         }
         return response;
     }

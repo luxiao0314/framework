@@ -29,7 +29,6 @@ public class RetrofitException {
     private static final int ACCESS_DENIED = 302;
 
     public static Throwable handleException(java.lang.Throwable e) {
-
         Logger.e("RetrofitException", e.getMessage());
         Throwable ex;
         if (e instanceof HttpException) {
@@ -120,7 +119,7 @@ public class RetrofitException {
             return ex;
         } else {
             ex = new Throwable(e, ERROR.UNKNOWN);
-            ex.setMessage("未知错误");
+            ex.setMessage(e.getMessage());
             return ex;
         }
     }

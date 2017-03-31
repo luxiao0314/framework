@@ -1,7 +1,9 @@
 package com.mvvm.lux.framework.config;
 
-import com.mvvm.lux.framework.http.RxSubscriber;
-import com.mvvm.lux.framework.rx.RxBus;
+import com.mvvm.lux.framework.http.exception.CusException;
+import com.mvvm.lux.framework.utils.AESOperator;
+import com.mvvm.lux.framework.utils.NetworkUtil;
+import com.mvvm.lux.framework.utils.SnackbarUtil;
 import com.orhanobut.hawk.Hawk;
 
 import rx.Observable;
@@ -17,20 +19,22 @@ public class RxCache {
     private static String cacheKey;//缓存key
 
     /**
+     * @param <T>
      * @param fromNetwork  从网络获取的Observable
      * @param forceRefresh 是否强制刷新
-     * @param <T>
+     * @param key
      * @return
      */
-    public static <T> Observable<T> load(Observable<T> fromNetwork, final boolean forceRefresh) {
+    public static <T> Observable<T> load(Observable<T> fromNetwork, final boolean forceRefresh, String key) {
+        cacheKey = AESOperator.encryptSHA256(key);
         //从拦截器获取的url
-        RxBus.init().toObservable(PassUrlEvent.class)
-                .subscribe(new RxSubscriber<PassUrlEvent>() {
-                    @Override
-                    public void onNext(PassUrlEvent passUrlEvent) {
-                        cacheKey = passUrlEvent.url;
-                    }
-                });
+//        RxBus.init().toObservable(PassUrlEvent.class)
+//                .subscribe(new RxSubscriber<PassUrlEvent>() {
+//                    @Override
+//                    public void onNext(PassUrlEvent passUrlEvent) {
+//                        RxCache.cacheKey = passUrlEvent.url;
+//                    }
+//                });
 
         Observable<T> fromCache = Observable.create(new Observable.OnSubscribe<T>() {
             @Override
@@ -39,11 +43,15 @@ public class RxCache {
                 if (cache != null) {
                     subscriber.onNext(cache);
                 } else {
-                    subscriber.onCompleted();
+                    subscriber.onError(new CusException("缓存数据为空"));
                 }
             }
         });
 
+        if (!NetworkUtil.isNetworkAvailable()) {
+            SnackbarUtil.showMessage("数据加载失败,请重新加载或者检查网络是否链接");
+            return fromCache;
+        }
 
         /**
          * 这里的fromNetwork 不需要指定Schedule,在handleRequest中已经变换了
@@ -55,50 +63,17 @@ public class RxCache {
                 return result;
             }
         });
+
         if (forceRefresh) {
             return fromNetwork;
-        } else {
-            return Observable.concat(fromCache, fromNetwork).first();
         }
 
-        /*//从本地读取的数据
-        final Observable<T> fromCache = Observable.just(true)
-                .map(new Func1<Boolean, T>() {
+        return Observable.concat(fromCache, fromNetwork)
+                .takeFirst(new Func1<T, Boolean>() {
                     @Override
-                    public T call(Boolean aBoolean) {
-                        return Hawk.get(cacheKey);
+                    public Boolean call(T t) {
+                        return t != null;
                     }
                 });
-
-        if (!NetworkUtil.isNetworkAvailable()) {
-            return fromCache;
-        }
-
-        if (forceRefresh) {
-            return fromNetwork;
-        }
-
-        //从网络取数据,这里的fromNetwork 不需要指定Schedule,在handleRequest中已经变换了
-        return fromNetwork.flatMap(new Func1<T, Observable<T>>() {
-
-            @Override
-            public Observable<T> call(T result) {
-                Hawk.put(cacheKey, result); //保存数据
-                //concat:首先取缓存,如果缓存有数据就使用缓存,如果没有就使用网络(如何使得哪层有数据就用哪层的，之后就不走后面的逻辑了。)
-                return Observable.concat(fromCache, fromNetwork)
-                        .takeFirst(new Func1<T, Boolean>() {
-                            @Override
-                            public Boolean call(T t) {
-                                return t != null;
-                            }
-                        })
-                        .doOnNext(new Action1<T>() {
-                            @Override
-                            public void call(T t) {
-                                HandleResultFuc.createData(t);
-                            }
-                        });
-            }
-        });*/
     }
 }
