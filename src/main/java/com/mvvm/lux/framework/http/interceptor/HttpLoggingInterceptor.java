@@ -1,7 +1,5 @@
 package com.mvvm.lux.framework.http.interceptor;
 
-import com.mvvm.lux.framework.utils.Logger;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
@@ -18,13 +16,11 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 
 /**
- * ================================================
- * 作    者：廖子尧
- * 版    本：1.0
- * 创建日期：2016/1/12
- * 描    述：OkHttp拦截器，主要用于打印日志
- * 修订历史：
- * ================================================
+ * @Description OkHttp拦截器，主要用于打印日志
+ * @Author luxiao418
+ * @Email luxiao418@pingan.com.cn
+ * @Date 2017/4/14 10:27
+ * @Version 1.0.0
  */
 public class HttpLoggingInterceptor implements Interceptor {
 
@@ -93,6 +89,7 @@ public class HttpLoggingInterceptor implements Interceptor {
         Protocol protocol = connection != null ? connection.protocol() : Protocol.HTTP_1_1;
 
         try {
+            log("-  ");
             String requestStartMessage = "request =================> " + request.method() + "\n" + ' ' + request.url() + ' ' + protocol;
             log(requestStartMessage);
 
@@ -112,9 +109,10 @@ public class HttpLoggingInterceptor implements Interceptor {
                 }
             }
         } catch (Exception e) {
-            Logger.e(e);
+            log(e.getMessage());
         } finally {
             log("request =================> END " + request.method() + "\n");
+            log("-  ");
         }
     }
 
@@ -126,18 +124,17 @@ public class HttpLoggingInterceptor implements Interceptor {
         boolean logHeaders = (printLevel == Level.BODY || printLevel == Level.HEADERS);
 
         try {
+            log("-    ");
             log("response <=================================== " + clone.code() + ' ' + clone.message() + ' ' + "\n" + clone.request().url() + " (" + tookMs + "ms）" + "\n");    //URL
             if (logHeaders) {
                 Headers headers = clone.headers();
                 for (int i = 0, count = headers.size(); i < count; i++) {
                     log("\t" + headers.name(i) + ": " + headers.value(i));
                 }
-                log(" ");
-//                if (logBody && responseBody.hasBody(clone)) {
+                log(":  ");
                 if (logBody) {
                     if (isPlaintext(responseBody.contentType())) {
                         String body = responseBody.string();
-//                        log("\tbody:" + JsonFormatTool.formatJson(body)); //JSON数据量过大,没法打印完整
                         log("\tbody:" + body);
                         responseBody = ResponseBody.create(responseBody.contentType(), body);
                         return response.newBuilder().body(responseBody).build();
@@ -147,9 +144,10 @@ public class HttpLoggingInterceptor implements Interceptor {
                 }
             }
         } catch (Exception e) {
-            Logger.e(e);
+            log(e.getMessage());
         } finally {
-            log("response <=================================== END HTTP" + "\n\n");
+            log("response <=================================== END HTTP");
+            log("-    ");
         }
         return response;
     }
