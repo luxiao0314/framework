@@ -1,10 +1,12 @@
 package com.mvvm.lux.framework.http;
 
 import android.support.v4.app.DialogFragment;
+import android.view.View;
 
-import com.mvvm.lux.framework.manager.dialogs.DialogManager;
 import com.mvvm.lux.framework.manager.dialogs.config.BaseTask;
 import com.mvvm.lux.framework.manager.dialogs.interfaces.ProgressCancelListener;
+import com.mvvm.lux.widget.loading.bar.LoadingBar;
+import com.mvvm.lux.widget.loading.factory.CustomLoadingFactory;
 
 /**
  * @Description 带progress的subscriber
@@ -17,13 +19,15 @@ import com.mvvm.lux.framework.manager.dialogs.interfaces.ProgressCancelListener;
  */
 public abstract class ProgressSubscriber<T> extends RxSubscriber<T> implements ProgressCancelListener {
 
+    private final View mParent;
     private BaseTask mServiceTask;
     private DialogFragment mDialogFragment;
 
     public ProgressSubscriber(BaseTask serviceTask) {
-        if (serviceTask != null)
-            serviceTask.setOnCancelProgress(this);
-        mServiceTask = serviceTask;
+//        if (serviceTask != null)
+//            serviceTask.setOnCancelProgress(this);
+//        mServiceTask = serviceTask;
+        mParent = serviceTask.getContext().getWindow().getDecorView().findViewById(android.R.id.content);
     }
 
     @Override
@@ -45,18 +49,20 @@ public abstract class ProgressSubscriber<T> extends RxSubscriber<T> implements P
     }
 
     private void showProgressDialog() {
-        //不知道为什么activity会destroy了, 所以这里一直报错
-        if (mDialogFragment == null && mServiceTask != null && !mServiceTask.getContext().isDestroyed()) {
-            mDialogFragment = DialogManager.showProgressDialog(mServiceTask);
-        } else {
-            dismissProgressDialog();
-        }
+//        //不知道为什么activity会destroy了, 所以这里一直报错
+//        if (mDialogFragment == null && mServiceTask != null && !mServiceTask.getContext().isDestroyed()) {
+//            mDialogFragment = DialogManager.showProgressDialog(mServiceTask);
+//        } else {
+//            dismissProgressDialog();
+//        }
+        LoadingBar.make(mParent,new CustomLoadingFactory()).show();
     }
 
     private void dismissProgressDialog() {
-        if (mDialogFragment != null) {
-            mDialogFragment.dismissAllowingStateLoss();
-        }
+        LoadingBar.cancel(mParent);
+//        if (mDialogFragment != null) {
+//            mDialogFragment.dismissAllowingStateLoss();
+//        }
     }
 
     @Override

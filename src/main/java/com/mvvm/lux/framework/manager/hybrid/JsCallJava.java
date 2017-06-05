@@ -12,7 +12,15 @@ import org.json.JSONObject;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
-
+/**
+ * @Description 【1】让JS调用一个Javascript方法，这个方法中是调用prompt方法，通过prompt把JS中的信息传递过来，这些信息应该是我们组合成的一段有意义的文本，可能包含：特定标识，方法名称，参数等。在onJsPrompt方法中，我们去解析传递过来的文本，得到方法名，参数等，再通过反射机制，调用指定的方法，从而调用到Java对象的方法。
+                【2】关于返回值，可以通过prompt返回回去，这样就可以把Java中方法的处理结果返回到Js中。
+                【3】我们需要动态生成一段声明Javascript方法的JS脚本，通过loadUrl来加载它，从而注册到html页面中
+ * @Author luxiao418
+ * @Email luxiao418@pingan.com.cn
+ * @Date 2017/4/19 11:44
+ * @Version
+ */
 public class JsCallJava {
     private final static String TAG = "JsCallJava";
     private final static String RETURN_RESULT_FORMAT = "{\"code\": %d, \"result\": %s}";
@@ -44,6 +52,7 @@ public class JsCallJava {
 
             sb.append("function(){var f=Array.prototype.slice.call(arguments,0);if(f.length<1){throw\"");
             sb.append(mInjectedName);
+            //动态生成一段声明Javascript方法的JS脚本，通过loadUrl来加载它，从而注册到html页面中,这里的prompt就是为了调用 webView中onPrompt方法
             sb.append(" call error, message:miss method name\"}var e=[];for(var h=1;h<f.length;h++){var c=f[h];var j=typeof c;e[e.length]=j;if(j==\"function\"){var d=a.queue.length;a.queue[d]=c;f[h]=d}}var g=JSON.parse(prompt(JSON.stringify({method:f.shift(),types:e,args:f})));if(g.code!=200){throw\"");
             sb.append(mInjectedName);
             sb.append(" call error, code:\"+g.code+\", message:\"+g.result}return g.result};Object.getOwnPropertyNames(a).forEach(function(d){var c=a[d];if(typeof c===\"function\"&&d!==\"callback\"){a[d]=function(){return c.apply(a,[d].concat(Array.prototype.slice.call(arguments,0)))}}});b.");
@@ -56,6 +65,11 @@ public class JsCallJava {
             Log.e(TAG, "init js error:" + e.getMessage());
         }
     }
+
+    /*  1，上面代码中的jsInterface就是要注册的对象名，它注册了两个方法，onButtonClick(arg0)和onImageClick(arg0, arg1, arg2)，如果有返回值，就添加上return。
+        2，prompt中是我们约定的字符串，它包含特定的标识符MyApp:，后面包含了一串JSON字符串，它包含了方法名，参数，对象名等。
+        3，当JS调用onButtonClick或onImageClick时，就会回调到Java层中的onJsPrompt方法，我们再解析出方法名，参数，对象名，再反射调用方法。
+        4，window.jsInterface这表示在window上声明了一个Js对象，声明方法的形式是：方法名:function(参数1，参数2)*/
 
     private String genJavaMethodSign (Method method) {
         String sign = method.getName();

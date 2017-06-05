@@ -52,7 +52,7 @@ public interface FrameworkSupport {
      * @param id 模块ID
      * @param params
      */
-    void goToActivity(FragmentActivity activity, int id, String params);
+    void goToActivity(FragmentActivity activity, int id,String url, String params);
 
     /**
      * 获取应用的apptype
@@ -63,4 +63,5 @@ public interface FrameworkSupport {
 
     DialogFragment showNetworkProcessDialog(BaseTask taskExchangeModel);
 
+    void onTokenInvalid();
 }

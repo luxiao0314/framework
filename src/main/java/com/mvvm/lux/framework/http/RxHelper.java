@@ -37,7 +37,7 @@ public class RxHelper {
                         .compose(io_main()) //处理线程切换,注销Observable
                         .onErrorResumeNext(httpResponseFunc())//判断异常
                         .retryWhen(new RetryFuc(3, 2 * 1000)) //重试次数,重试间隔
-                        .retryWhen(new TimeOutRetry());  //token过期的重试,有问题
+                        .retryWhen(new TimeOutRetry());  //token过期的重试
             }
         };
     }

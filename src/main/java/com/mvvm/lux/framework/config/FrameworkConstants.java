@@ -36,6 +36,7 @@ public class FrameworkConstants {
         String LAST_LOGIN_NAME = "last_login_name";
         //新加
         String USER_TOKEN = "user_token";
+        String THIRD_USER_INFO = "third_user_info";
     }
 
 
