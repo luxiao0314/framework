@@ -110,7 +110,9 @@ public abstract class MvvmFragment<T extends BaseViewModel> extends SupportFragm
         // view被销毁后，将可以重新触发数据懒加载，因为在viewpager下，fragment不会再次新建并走onCreate的生命周期流程，将从onCreateView开始
         hasFetchData = false;
         isViewPrepared = false;
-        mViewModel.detachView();
+        if (mViewModel!= null) {
+            mViewModel.detachView();
+        }
     }
 
     @Override

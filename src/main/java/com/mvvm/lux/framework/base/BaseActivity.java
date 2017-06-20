@@ -36,7 +36,7 @@ public abstract class BaseActivity<T extends BaseViewModel> extends SupportActiv
     }
 
     private void init() {
-        setTranslucentStatus(true);
+        setTranslucentStatus(false);
         BaseApplication.getAppContext().registerActivity(this);
     }
 
