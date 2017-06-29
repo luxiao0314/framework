@@ -3,7 +3,7 @@ package com.mvvm.lux.framework.utils;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import com.mvvm.lux.framework.BaseApplication;
+import com.mvvm.lux.framework.manager.IActivityManager;
 
 /**
  * Created by hcc on 16/8/20 12:18
@@ -14,7 +14,7 @@ import com.mvvm.lux.framework.BaseApplication;
 public class SnackbarUtil {
 
     public static void showMessage(String text) {
-        Snackbar.make(BaseApplication.lastActivity().getWindow().getDecorView(), text, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(IActivityManager.instance.currentActivity().getWindow().getDecorView(), text, Snackbar.LENGTH_SHORT).show();
     }
 
     public static void showMessage(View view, String text) {

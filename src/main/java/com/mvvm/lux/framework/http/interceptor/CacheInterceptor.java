@@ -3,7 +3,7 @@ package com.mvvm.lux.framework.http.interceptor;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.mvvm.lux.framework.BaseApplication;
+import com.mvvm.lux.framework.manager.IActivityManager;
 import com.mvvm.lux.framework.utils.NetworkUtil;
 import com.mvvm.lux.framework.utils.SnackbarUtil;
 
@@ -70,7 +70,7 @@ public class CacheInterceptor implements Interceptor {
                     .cacheControl(CacheControl.FORCE_CACHE)
                     .build();
 
-            BaseApplication.lastActivity().runOnUiThread(new Runnable() {
+            IActivityManager.instance.currentActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     SnackbarUtil.showMessage("数据加载失败,请重新加载或者检查网络是否链接");
