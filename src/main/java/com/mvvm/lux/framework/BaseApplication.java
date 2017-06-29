@@ -7,6 +7,7 @@ import android.os.Process;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.mvvm.lux.framework.http.RetrofitExcuter;
 import com.mvvm.lux.framework.http.fresco.ImageLoaderConfig;
+import com.mvvm.lux.framework.manager.CusActivityLifecycleCallbacks;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.LinkedList;
@@ -33,6 +34,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         sInstance = this;
         init();
+        registerActivityLifecycleCallbacks(new CusActivityLifecycleCallbacks());
     }
 
     private void init() {
